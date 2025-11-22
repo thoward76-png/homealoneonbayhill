@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Home Alone on Bay Hill Trivia Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('AdobeStock_375652874.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            color: black;
+            text-align: left;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+            border-bottom: 3px solid darkgreen;
+        }
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
+        .puzzle {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9); 
+            color: #222;
+            border-radius: 10px;
+        }
+        .puzzle.hidden {
+            display: none;
+        }
+        button {
+            background-color: darkgreen;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4caf50;
+        }
+        .choices button {
+            background: darkgreen;
+            border: 1px solid #777;
+            margin: 5px;
+            width: 100%;
+        }
+        .choices button:hover {
+            background-color: darkred;
+        }
+        .celebration-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            max-width: 400px;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+        .celebration-popup img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .share-btn {
+            background-color: #4267B2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .share-btn:hover {
+            background-color: #365899;
+        }
+        .close-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="IMG_5930.PNG?nocache=12345" alt="Logo">
+        </div>
+        <h1 style="color:darkred;font-weight:normal;font-size:30px;padding-top:0px;margin-top:0px;padding-bottom:0px;margin-bottom:0px;">Trivia Game</h1>
+        <div id="questions"></div>
+        <div id="winScreen" class="puzzle hidden">
+            <h2 id="resultHeader">Your Results</h2>
+            <p id="scoreSummary"></p>
+            <div id="missedQuestions"></div>
+            <button id="retryButton" onclick="retryMissed()">Retry Missed Questions</button>
+        </div>
+        <div id="celebrationPopup" class="celebration-popup">
+            <img src="trout_sniffer.gif" alt="Celebration">
+            <!--<h2>Beat that you little trout sniffer!</h2>-->
+            <button class="share-btn" onclick="shareOnFacebook()">Share on Facebook</button>
+            <button class="close-btn" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+    <script>
+
+	// Google Apps Script URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwpBeeraG9SsG-px5gBJrc_UZtjykj7-jMe-HsJ9T54bJE2o5J1zHM56PG-4Drcu9xttw/exec"; // Replace with your Apps Script URL
+
+        const questions = [
+            { id: 1, question: "What food did Kevin prepare for dinner on Christmas Eve?", options: ["Kraft Macaroni and Cheese", "Spaghetti", "Pizza", "Velveeta Shells and Cheese"], correct: "A" },
+            { id: 2, question: "How many paint cans did Kevin throw at the Wet Bandits?", options: ["1", "2", "3", "None"], correct: "B" },
+            { id: 3, question: "What did Buzz feed his tarantula before they left?", options: ["Crickets", "Mice Guts", "Leftover Pizza", "Spiders"], correct: "B" },
+            { id: 4, question: "Where does Old Man Marley first talk to Kevin?", options: ["At the grocery store", "In front of Kevin’s house", "At the church", "At the ice skating rink"], correct: "C" },
+            { id: 5, question: "What slogan is on the Little Nero’s Pizza delivery car?", options: ["Hot and Ready", "No Fiddlin’ Around", "Delivering Smiles", "Pizza in a Flash"], correct: "B" },
+            { id: 6, question: "What’s the famous line Kevin uses from 'Angels with Filthy Souls'?", options: ["Merry Christmas, ya filthy animal", "Keep the change, ya filthy animal", "Get outta here!", "I’m the boss now"], correct: "B" },
+            { id: 7, question: "What time did Kevin say his battle plan would start?", options: ["6 PM", "7 PM", "8 PM", "9 PM"], correct: "D" },
+            { id: 8, question: "What do the Wet Bandits do to houses they rob?", options: ["Flood the house", "Trash the house", "Leave calling cards", "Leave graffiti"], correct: "A" },
+            { id: 9, question: "Where did Kevin famously sled?", options: ["Out of a window", "Down the stairs", "On the roof", "In the yard"], correct: "B" },
+            { id: 10, question: "What falls on Marv when he pulls the light cord in the basement?", options: ["A can of paint", "A bucket of tools", "A bag of flour", "A clothes iron"], correct: "D" }
+        ];
+
+        let playerAnswers = {};
+        let missedQuestions = [];
+
+	// Fetch the current counter value from Google Sheets
+        function fetchCounter() {
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(data => {
+                    playCountEl.textContent = data.count;
+                })
+                .catch(error => {
+                    console.error("Error fetching counter:", error);
+                    playCountEl.textContent = "Error";
+                });
+        }
+
+	// Increment the counter in Google Sheets
+        function incrementCounter() {
+            fetch(scriptURL, { method: "POST" })
+                .then(response => response.json())
+                .then(data => {
+                    playCountEl.textContent = data.count;
+                })
+                .catch(error => {
+                    console.error("Error incrementing counter:", error);
+                });
+        }
+
+        function generateQuestions(questionIds = null) {
+            const container = document.getElementById("questions");
+            container.innerHTML = "";
+
+            const filteredQuestions = questionIds ? questions.filter(q => questionIds.includes(q.id)) : questions;
+
+            filteredQuestions.forEach((q, i) => {
+                const puzzleDiv = document.createElement("div");
+                puzzleDiv.id = `puzzle${q.id}`;
+                puzzleDiv.className = `puzzle ${i > 0 ? "hidden" : ""}`;
+                puzzleDiv.innerHTML = `
+                    <h2>Question ${q.id}: ${q.question}</h2>
+                    <div class="choices">
+                        ${q.options.map((opt, j) => `<button onclick="selectAnswer(${q.id}, '${String.fromCharCode(65 + j)}')">${String.fromCharCode(65 + j)}. ${opt}</button>`).join("")}
+                    </div>
+                `;
+                container.appendChild(puzzleDiv);
+            });
+        }
+
+        function selectAnswer(qId, choice) {
+            playerAnswers[qId] = choice;
+            const unanswered = missedQuestions.length ? missedQuestions : questions.map(q => q.id);
+            const next = unanswered.indexOf(qId) + 1;
+            if (next < unanswered.length) showPuzzle(`puzzle${unanswered[next]}`);
+            else calculateScore();
+        }
+
+        function calculateScore() {
+            missedQuestions = questions.filter(q => playerAnswers[q.id] !== q.correct).map(q => q.id);
+            if (!missedQuestions.length) showCelebrationPopup();
+            else {
+                document.getElementById("scoreSummary").innerText = `You scored ${questions.length - missedQuestions.length}/${questions.length}.`;
+                const missedContainer = document.getElementById("missedQuestions");
+                missedContainer.innerHTML = missedQuestions.map(mq => `<p>Question ${mq}</p>`).join("");
+                showPuzzle("winScreen");
+            }
+        }
+
+        function showPuzzle(id) {
+            document.querySelectorAll(".puzzle").forEach(p => p.classList.add("hidden"));
+            document.getElementById(id).classList.remove("hidden");
+        }
+
+        function retryMissed() {
+            generateQuestions(missedQuestions);
+            showPuzzle(`puzzle${missedQuestions[0]}`);
+        }
+
+        function showCelebrationPopup() {
+            document.getElementById("celebrationPopup").style.display = "block";
+	    incrementCounter();
+        }
+
+        function closePopup() {
+            document.getElementById("celebrationPopup").style.display = "none";
+    	    // Redirect to the landing page
+            window.location.href = "homealoneonbayhill_findit.html";
+        }
+
+        function shareOnFacebook() {
+		//const urlToShare = "https://www.facebook.com/home.alone.house.on.bay.hill"; // Your Facebook page
+    		//const imageUrl = "https://postimg.cc/LJVyCtHG"; // Public URL of the image
+    		//const quote = "I just won the Home Alone on Bay Hill Trivia Challenge"; // Custom message
+    
+    		// Create the share URL with pre-filled content
+	    //const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlToShare)}&quote=${encodeURIComponent(quote)}&picture=${encodeURIComponent(imageUrl)}`;
+    
+   	 // Open the share dialog in a new tab
+    	 //window.open(fbShareUrl, "_blank");
+	
+	
+            const url = "https://www.facebook.com/home.alone.house.on.bay.hill";
+            const message = `I just aced the Home Alone Trivia Challenge!`;
+            const fbShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(message)}`;
+            window.open(fbShare, "_blank");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => generateQuestions());
+    </script>
+</body>
+</html>
