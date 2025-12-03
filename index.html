@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Alone on Bay Hill</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('AdobeStock_375652874.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            color: black;
+            text-align: left;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 0px;
+	    padding-bottom: 0px;
+	    border-bottom: 3px solid darkgreen;
+        }
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
+        h1 {
+            color: #6C886B;
+            font-weight: normal;
+            font-size: 30px;
+            margin-top: 0;
+        }
+        .link-button {
+            display: block;
+            margin: 15px auto;
+            padding: 10px 20px;
+            width: 90%;
+            max-width: 400px;
+            background-color: darkgreen;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+        }
+        .link-button:hover {
+            background-color: darkred;
+        }
+	.new-badge {
+            font-weight: bold;
+            color: yellow;
+            margin-left: 10px;
+            font-size: 16px;
+            background-color: transparent;
+       }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="IMG_5930.PNG" alt="Home Alone on Bay Hill">
+        </div>
+        <h1 style="color:darkred;font-weight:normal;font-size:30px;padding-top:0px;margin-top:0px;padding-bottom:0px;margin-bottom:0px;">Welcome to Home Alone on Bay Hill</h1>
+
+        <!-- Links -->
+        <!--<a class="link-button" href="homealoneonbayhill_findit_2.html">Game 2 - Trivia Game -<span class="new-badge">New!!!</span></a>-->
+        <a class="link-button" href="homealoneonbayhill_findit_1.html">Game 1 - Scavenger Hunt Game</a>
+		<a class="link-button" href="homealoneonbayhill_findit_2.html">Game 2 - Trivia Game</a>
+	<!--<a class="link-button" href="https://www.surveymonkey.com/r/LightUpConway2024" target="_blank">Light Up Conway Voting</a>-->
+	<!--<a class="link-button" href="https://www.surveymonkey.com/r/LightUpConway2024" target="_blank">Light Up Conway Voting</a>-->
+	<!--<a class="link-button" href="#" onclick="handleVoteClick()">Thanks to everyone who voted!</a>-->
+        <a class="link-button" href="https://www.facebook.com/share/1CsF7r5wZN/" target="_blank">Visit Our Facebook Page</a>
+        <a class="link-button" href="https://www.thv11.com/video/life/holidays/this-home-alone-inspired-house-turns-into-christmas-destination/91-d48a7e87-3a20-40ea-9069-0f427773aaca" target="_blank">KTHV Interview</a>
+	<a class="link-button" href="https://katv.com/community/little-rock-arc/conway-family-transforms-home-into-home-alone-holiday-wonderland-angie-howard-talks-with-little-rock-arc-about-the-display-tiktok#" target="_blank">KATV Interview</a>
+    <a class="link-button" href="https://www.fox16.com/video/%e2%80%98home-alone%e2%80%99-house-in-conway-brings-movie-fans-to-central-arkansas/10320795/" target="_blank">Fox 16 News Interview</a>
+	</div>
+    <script>
+
+	// Google Apps Script URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzvVBhQYkleTUdHL63tWilrza-jrT3I6PNeFWIWqN-3TpALNJezwvYed27uSSIeIQdxOA/exec"; // Replace with your Apps Script URL
+
+        // Fetch the current counter value from Google Sheets
+        function fetchCounter() {
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(data => {
+                    playCountEl.textContent = data.count;
+                })
+                .catch(error => {
+                    console.error("Error fetching counter:", error);
+                    playCountEl.textContent = "Error";
+                });
+        }
+
+	// Increment the counter in Google Sheets
+        function incrementCounter() {
+            fetch(scriptURL, { method: "POST" })
+                .then(response => response.json())
+                .then(data => {
+                    playCountEl.textContent = data.count;
+                })
+                .catch(error => {
+                    console.error("Error incrementing counter:", error);
+                });
+        }
+
+    	function handleVoteClick() {
+    	   incrementCounter(); // Increment the counter
+    	   setTimeout(() => {
+              //window.open("https://www.surveymonkey.com/r/LightUpConway2024", "_blank"); // Open the voting link in a new tab
+	          window.open("https://www.facebook.com/stories/122093547008171391/UzpfSVNDOjE2OTU3OTMzODA5Nzc2NDc=/?view_single=1", "_blank"); 
+           }, 500); // Slight delay to ensure the counter increments before navigating
+	}
+
+    </script>
+
+</body>
+</html>
