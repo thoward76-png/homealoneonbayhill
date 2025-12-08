@@ -93,8 +93,12 @@
         .donation-buttons a:hover {
             background: #990000;
         }
+        #stats-box {
+            margin-top: 30px;
+            font-size: 18px;
+        }
         footer {
-            margin-top: 25px;
+            margin-top: 15px;
             font-size: 14px;
             color: #333;
         }
@@ -116,27 +120,34 @@
     </div>
 
     <div class="section-title">🎮 Play the Games</div>
-    <a class="link-button" href="https://thoward76-png.github.io/home_alone_wet_bandits_game/">
+
+    <a class="link-button" href="wet_bandits_return.html" onclick="track('play_wetbandits')">
         Wet Bandits Return <span class="new-badge">NEW!</span>
     </a>
-    <a class="link-button" href="https://thoward76-png.github.io/home-alone-bay-hill-drive-game/">
+
+    <a class="link-button" href="bayhill_drive_heist.html" onclick="track('play_heist')">
         The Bay Hill Drive Heist <span class="new-badge">NEW!</span>
     </a>
-    <a class="link-button" href="homealoneonbayhill_findit_1.html">
+
+    <a class="link-button" href="homealoneonbayhill_findit_1.html" onclick="track('play_scavenger')">
         Game 1 – Scavenger Hunt
     </a>
-    <a class="link-button" href="homealoneonbayhill_findit_2.html">
+
+    <a class="link-button" href="homealoneonbayhill_findit_2.html" onclick="track('play_trivia')">
         Game 2 – Trivia Game
     </a>
 
     <div class="section-title">📺 News & Media</div>
-    <a class="link-button" href="https://www.facebook.com/share/1CsF7r5wZN/" target="_blank">Visit Our Facebook Page</a>
+
+    <a class="link-button" href="https://www.facebook.com/share/1CsF7r5wZN/" target="_blank" onclick="track('click_facebook')">
+        Visit Our Facebook Page
+    </a>
     <a class="link-button" href="https://www.thv11.com/video/life/holidays/this-home-alone-inspired-house-turns-into-christmas-destination/91-d48a7e87-3a20-40ea-9069-0f427773aaca"
-       target="_blank">KTHV Interview</a>
+       target="_blank" onclick="track('click_kthv')">KTHV Interview</a>
     <a class="link-button" href="https://katv.com/community/little-rock-arc/conway-family-transforms-home-into-home-alone-holiday-wonderland-angie-howard-talks-with-little-rock-arc-about-the-display-tiktok#"
-       target="_blank">KATV Interview</a>
+       target="_blank" onclick="track('click_katv')">KATV Interview</a>
     <a class="link-button" href="https://www.fox16.com/video/%e2%80%98home-alone%e2%80%99-house-in-conway-brings-movie-fans-to-central-arkansas/10320795/"
-       target="_blank">Fox 16 News Interview</a>
+       target="_blank" onclick="track('click_fox16')">Fox 16 News Interview</a>
 
     <div class="donation-box">
         <h2 style="color:darkred;margin-bottom:10px;">❤️ Support a Local Cause</h2>
@@ -148,9 +159,16 @@
         </p>
 
         <div class="donation-buttons">
-            <a href="https://account.venmo.com/u/Compass-Academy" target="_blank">Venmo</a>
-            <a href="https://cash.app/$EmandChan?qr=1" target="_blank">Cash App</a>
+            <a href="https://account.venmo.com/u/Compass-Academy" target="_blank" onclick="track('support_venmo')">Venmo</a>
+            <a href="https://cash.app/$EmandChan?qr=1" target="_blank" onclick="track('support_cashapp')">Cash App</a>
         </div>
+    </div>
+
+    <div id="stats-box">
+        🎯 Visitors Tonight: <span id="visitorsTonight">0</span><br>
+        ⭐ Season Total: <span id="totalVisitors">0</span><br>
+        🕹 Total Game Plays: <span id="totalGamePlays">0</span><br>
+        💚 Supporters: <span id="supporters">0</span>
     </div>
 
     <footer>
@@ -159,5 +177,36 @@
     </footer>
 
 </div>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbw9jVF4rEnGjxfjyHaRCafy53BwQNcpbR_QNPwjt4S-YbhkKg7AMIRZElxwGkykTcg/exec";
+
+function track(eventName) {
+    fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify({ event: eventName }),
+    }).catch(err => {
+        console.error("Track error", err);
+    });
+}
+
+function updateStats() {
+    fetch(scriptURL)
+        .then(r => r.json())
+        .then(d => {
+            if (d.visitorsTonight !== undefined) document.getElementById("visitorsTonight").innerText = d.visitorsTonight;
+            if (d.totalVisitors !== undefined) document.getElementById("totalVisitors").innerText = d.totalVisitors;
+            if (d.totalGamePlays !== undefined) document.getElementById("totalGamePlays").innerText = d.totalGamePlays;
+            if (d.supporters !== undefined) document.getElementById("supporters").innerText = d.supporters;
+        }).catch(err => {
+            console.error("Stats error", err);
+        });
+}
+
+track("visit_homepage");
+updateStats();
+setInterval(updateStats, 15000);
+</script>
+
 </body>
 </html>
