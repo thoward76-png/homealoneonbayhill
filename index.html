@@ -129,11 +129,11 @@
         The Bay Hill Drive Heist <span class="new-badge">NEW!</span>
     </a>
 
-    <a class="link-button" href="homealoneonbayhill_findit_1.html" onclick="track('play_scavenger')">
+    <a class="link-button" href="#" onclick="trackAndGo('play_scavenger', 'homealoneonbayhill_findit_1.html')">
         Game 1 – Scavenger Hunt
     </a>
 
-    <a class="link-button" href="homealoneonbayhill_findit_2.html" onclick="track('play_trivia')">
+    <a class="link-button" href="#" onclick="onclick="trackAndGo('play_trivia', 'homealoneonbayhill_findit_2.html')">
         Game 2 – Trivia Game
     </a>
 
@@ -185,37 +185,31 @@ function track(eventName) {
     fetch(scriptURL, {
         method: "POST",
         body: JSON.stringify({ event: eventName }),
-    }).catch(err => {
-        console.error("Track error", err);
-    });
+    }).catch(console.error);
+}
+
+function trackAndGo(eventName, url) {
+    track(eventName);
+    setTimeout(() => { window.location.href = url; }, 300);
 }
 
 function updateStats() {
     fetch(scriptURL)
         .then(r => r.json())
         .then(d => {
-            if (d.visitorsTonight !== undefined) document.getElementById("visitorsTonight").innerText = d.visitorsTonight;
-            if (d.totalVisitors !== undefined) document.getElementById("totalVisitors").innerText = d.totalVisitors;
-            if (d.totalGamePlays !== undefined) document.getElementById("totalGamePlays").innerText = d.totalGamePlays;
-            if (d.supporters !== undefined) document.getElementById("supporters").innerText = d.supporters;
-        }).catch(err => {
-            console.error("Stats error", err);
-        });
+            document.getElementById("visitorsTonight").innerText = d.visitorsTonight ?? 0;
+            document.getElementById("totalVisitors").innerText = d.totalVisitors ?? 0;
+            document.getElementById("totalGamePlays").innerText = d.totalGamePlays ?? 0;
+            document.getElementById("supporters").innerText = d.supporters ?? 0;
+        }).catch(console.error);
 }
 
-function trackAndGo(eventName, url) {
-    track(eventName);
-    setTimeout(() => {
-        window.location.href = url;
-    }, 300); // ensures POST is sent
-}
-
+// Count homepage visit only once per session
 if (!sessionStorage.getItem("visited_homepage")) {
     track("visit_homepage");
     sessionStorage.setItem("visited_homepage", "true");
 }
-    
-track("visit_homepage");
+
 updateStats();
 setInterval(updateStats, 15000);
 </script>
