@@ -121,11 +121,11 @@
 
     <div class="section-title">🎮 Play the Games</div>
 
-    <a class="link-button" href="https://thoward76-png.github.io/home_alone_wet_bandits_game/" onclick="track('play_wetbandits')">
+    <a class="link-button" href="#" onclick="trackAndGo('play_wetbandits', 'https://thoward76-png.github.io/home_alone_wet_bandits_game/')">
         Wet Bandits Return <span class="new-badge">NEW!</span>
     </a>
 
-    <a class="link-button" href="https://thoward76-png.github.io/home-alone-bay-hill-drive-game/" onclick="track('play_heist')">
+    <a class="link-button" href="#" onclick="trackAndGo('play_heist', 'https://thoward76-png.github.io/home-alone-bay-hill-drive-game/')">
         The Bay Hill Drive Heist <span class="new-badge">NEW!</span>
     </a>
 
@@ -203,6 +203,18 @@ function updateStats() {
         });
 }
 
+function trackAndGo(eventName, url) {
+    track(eventName);
+    setTimeout(() => {
+        window.location.href = url;
+    }, 300); // ensures POST is sent
+}
+
+if (!sessionStorage.getItem("visited_homepage")) {
+    track("visit_homepage");
+    sessionStorage.setItem("visited_homepage", "true");
+}
+    
 track("visit_homepage");
 updateStats();
 setInterval(updateStats, 15000);
