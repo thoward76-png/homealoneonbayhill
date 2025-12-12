@@ -22,10 +22,67 @@
             border-radius: 12px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.5);
         }
+
+        /* 🎄 VOTE BANNER STYLE (chasing lights) */
+        .vote-banner {
+            background: #fff8e6;
+            border: 2px solid #d62828;
+            padding: 14px;
+            border-radius: 10px;
+            margin: 20px 0 30px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #b30000;
+            position: relative;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.25);
+        }
+
+        .vote-banner::before,
+        .vote-banner::after {
+            content: "";
+            position: absolute;
+            left: 6%;
+            right: 6%;
+            height: 6px;
+            background-size: 160px 6px;
+            background-image: repeating-linear-gradient(
+                90deg,
+                #ff4d4d 0 10px,
+                #32cd32 10px 20px,
+                #ffd700 20px 30px,
+                #1e90ff 30px 40px
+            );
+            border-radius: 4px;
+            animation: chaseLights 2.4s linear infinite;
+        }
+
+        .vote-banner::before { top: -10px; }
+        .vote-banner::after  { bottom: -10px; }
+
+        @keyframes chaseLights {
+            0%   { background-position: 0 0; }
+            100% { background-position: 160px 0; }
+        }
+
+        .vote-button {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 10px 18px;
+            background: darkgreen;
+            color: white;
+            font-size: 17px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .vote-button:hover {
+            background: #b30000;
+        }
+
         .logo img {
             max-width: 100%;
             height: auto;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         h1 {
             color: darkred;
@@ -119,6 +176,18 @@
         Merry Christmas from our family to yours!
     </div>
 
+    <!-- 🎄 VOTE BANNER (now after verse, before games) -->
+    <div class="vote-banner">
+        ⭐ WE'VE BEEN NOMINATED! ⭐<br>
+        Help us shine in the Conway Light Up Contest!<br>
+        <a href="https://www.surveymonkey.com/r/LightUpConwayVote2025"
+           target="_blank"
+           onclick="track('click_vote')"
+           class="vote-button">
+            CLICK HERE TO CAST YOUR VOTE
+        </a>
+    </div>
+
     <div class="section-title">🎮 Play the Games</div>
 
     <a class="link-button" href="#" onclick="trackAndGo('play_wetbandits', 'https://thoward76-png.github.io/home_alone_wet_bandits_game/')">
@@ -151,11 +220,10 @@
 
     <div class="donation-box">
         <h2 style="color:darkred;margin-bottom:10px;">❤️ Support a Local Cause</h2>
-        <p style="margin:0 10px 10px 10px;">
+        <p>
             Many visitors asked how they could honor our efforts — so this year,
             if you feel led, please consider giving to:
             <br><strong>Compass Academy</strong>
-            A school supporting amazing kids with special needs.
         </p>
 
         <div class="donation-buttons">
@@ -179,8 +247,6 @@
 </div>
 
 <script>
-//const scriptURL = "https://script.google.com/macros/s/AKfycbyAkZq98NPur0FOUW_Ve7F8NCK2FQsfrBvvO-_ZN35fs8bnyLlfzYrGmzeJgRvvCLU/exec";
-//const scriptURL = "https://script.google.com/macros/s/AKfycbyZ270SekCwJeT6QrJmqdhU5F7jSVJJq749399gIP5keTxPIX-3SWgg1CsWD7MScQs/exec";
 const scriptURL = "https://script.google.com/macros/s/AKfycbwksAKDDe9cUQ1tfuMjtC46MYklu4S8UgZgfs4ybPNd_mxcX48ZFSBqnESOR9eB364/exec";
 
 function track(eventName) {
@@ -206,7 +272,6 @@ function updateStats() {
         }).catch(console.error);
 }
 
-// Count homepage visit only once per session
 if (!sessionStorage.getItem("visited_homepage")) {
     track("visit_homepage");
     sessionStorage.setItem("visited_homepage", "true");
