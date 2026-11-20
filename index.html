@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Alone on Bay Hill - 2025</title>
+    <title>Home Alone on Bay Hill - 2026</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,10 +15,10 @@
             text-align: center;
         }
         .container {
-            max-width: 650px;
-            margin: 30px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.92);
+            max-width: 560px;
+            margin: 22px auto;
+            padding: 22px;
+            background: rgba(255, 255, 255, 0.93);
             border-radius: 12px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.5);
         }
@@ -36,34 +36,25 @@
             position: relative;
             box-shadow: 0 0 10px rgba(255, 0, 0, 0.25);
         }
-
         .vote-banner::before,
-        .vote-banner::after {
+        .vote-banner::after,
+        .giving::before {
             content: "";
             position: absolute;
             left: 6%;
             right: 6%;
             height: 6px;
             background-size: 160px 6px;
-            background-image: repeating-linear-gradient(
-                90deg,
-                #ff4d4d 0 10px,
-                #32cd32 10px 20px,
-                #ffd700 20px 30px,
-                #1e90ff 30px 40px
-            );
+            background-image: repeating-linear-gradient(90deg, #ff4d4d 0 10px, #32cd32 10px 20px, #ffd700 20px 30px, #1e90ff 30px 40px);
             border-radius: 4px;
             animation: chaseLights 2.4s linear infinite;
         }
-
         .vote-banner::before { top: -10px; }
         .vote-banner::after  { bottom: -10px; }
-
         @keyframes chaseLights {
             0%   { background-position: 0 0; }
             100% { background-position: 160px 0; }
         }
-
         .vote-button {
             display: inline-block;
             margin-top: 8px;
@@ -75,40 +66,29 @@
             text-decoration: none;
             font-weight: bold;
         }
-        .vote-button:hover {
-            background: #b30000;
-        }
+        .vote-button:hover { background: #b30000; }
 
-        .logo img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 5px;
-        }
-        h1 {
-            color: darkred;
-            font-size: 34px;
-            margin-top: 0;
-        }
-        .verse {
-            font-style: italic;
-            font-size: 18px;
-            color: #333;
-            margin: 10px 0 20px 0;
-        }
+        .logo img { max-width: 100%; height: auto; margin-bottom: 5px; }
+        h1 { color: darkred; font-size: 32px; margin-top: 0; }
+        .verse { font-style: italic; font-size: 18px; color: #333; margin: 10px 0 20px 0; }
+        .intro { font-size: 17px; line-height: 1.5; margin: 8px auto 6px; }
         .section-title {
             font-weight: bold;
             font-size: 22px;
             color: darkred;
-            margin-top: 35px;
+            margin-top: 32px;
             border-bottom: 2px solid darkgreen;
             padding-bottom: 5px;
         }
+
+        /* Simple vertical menu */
         .link-button {
             display: block;
             margin: 12px auto;
             padding: 14px 20px;
             width: 92%;
             max-width: 420px;
+            box-sizing: border-box;
             background-color: darkgreen;
             color: white;
             border-radius: 6px;
@@ -116,49 +96,58 @@
             text-decoration: none;
             cursor: pointer;
         }
-        .link-button:hover {
-            background-color: darkred;
-        }
+        .link-button:hover, .link-button:focus-visible { background-color: darkred; }
+        .link-button small { display: block; font-size: 14px; color: #f0f0e6; margin-top: 4px; }
+        .new-badge { font-weight: bold; color: yellow; margin-left: 6px; font-size: 14px; }
 
-        /* (Your page uses this; restoring so it renders correctly) */
-        .new-badge {
-            font-weight: bold;
-            color: yellow;
-            margin-left: 6px;
-            font-size: 16px;
-        }
-
-        .donation-box {
-            background: rgba(255,255,255,0.95);
+        /* ❤️ Giving section */
+        .giving {
+            position: relative;
+            background: #fff8e6;
             border: 2px solid darkgreen;
-            padding: 15px;
-            margin-top: 25px;
+            padding: 20px 16px 16px;
+            margin-top: 26px;
             border-radius: 10px;
         }
-
-        /* (Your page uses donation-buttons; restoring so it renders correctly) */
+        .giving::before { top: -10px; }
+        .giving h2 { color: darkred; margin: 0 0 6px; font-size: 24px; }
+        .giving p { margin: 6px 8px 12px; font-size: 16px; line-height: 1.45; }
+        .give-total { font-size: 46px; font-weight: bold; color: darkgreen; margin: 4px 0 0; line-height: 1.1; }
+        .give-total-label { font-size: 14px; text-transform: uppercase; letter-spacing: .08em; color: #555; }
+        .give-stats { display: flex; justify-content: center; gap: 10px; margin: 16px 0 10px; flex-wrap: wrap; }
+        .give-stat { background: white; border: 1px solid #dfd3b5; border-radius: 8px; padding: 10px 8px; min-width: 120px; flex: 1; }
+        .give-stat b { display: block; font-size: 22px; color: darkred; }
+        .give-stat span { font-size: 13px; color: #444; }
+        .progress { margin: 14px 4px 4px; text-align: left; font-size: 14px; color: #333; }
+        .bar { height: 16px; background: #e8e0cc; border-radius: 8px; overflow: hidden; margin-top: 6px; }
+        .bar div { height: 100%; width: 0; background: linear-gradient(90deg, darkgreen, #3aa35c); border-radius: 8px; transition: width 1.2s ease; }
+        .give-history { font-size: 14px; color: #444; margin: 10px 0 0; }
         .donation-buttons a {
             display: inline-block;
-            margin: 10px;
-            padding: 10px 18px;
+            margin: 8px;
+            padding: 12px 22px;
             background: darkred;
             color: white;
             font-size: 18px;
+            font-weight: bold;
             border-radius: 6px;
             text-decoration: none;
         }
-        .donation-buttons a:hover {
-            background: #990000;
-        }
+        .donation-buttons a:hover { background: #990000; }
+        .give-updated { font-size: 12px; color: #666; margin-top: 6px; }
 
-        #stats-box {
-            margin-top: 30px;
-            font-size: 18px;
+        #stats-box { margin-top: 30px; font-size: 17px; line-height: 1.6; }
+        .stats-note { font-size: 12px; color: #555; line-height: 1.4; margin: 8px 0; }
+        footer { margin-top: 15px; font-size: 14px; color: #333; }
+
+        @media (max-width: 560px) {
+            .container { margin: 10px; padding: 15px; }
+            h1 { font-size: 26px; }
+            .give-total { font-size: 40px; }
         }
-        footer {
-            margin-top: 15px;
-            font-size: 14px;
-            color: #333;
+        @media (prefers-reduced-motion: reduce) {
+            .vote-banner::before, .vote-banner::after, .giving::before { animation: none; }
+            .bar div { transition: none; }
         }
     </style>
 </head>
@@ -170,7 +159,7 @@
         <img src="IMG_5930.PNG" alt="Home Alone on Bay Hill">
     </div>
 
-    <h1>Home Alone on Bay Hill – 2025</h1>
+    <h1>Home Alone on Bay Hill – 2026</h1>
 
     <div class="verse">
         “For unto us a child is born…” — Isaiah 9:6 <br>
@@ -188,103 +177,88 @@
         </a>
     </div> -->
 
-    <div class="section-title">🎮 Play the Games</div>
+    <p class="intro">Welcome to our family's Home Alone-inspired Christmas display! Explore the decorations, test your movie knowledge, and try our interactive adventures. All games are free to play.</p>
 
-    <a class="link-button" href="#" onclick="trackAndGo('play_wetbandits', 'https://thoward76-png.github.io/home_alone_wet_bandits_game/')">
-        Wet Bandits Return <span class="new-badge">NEW!</span>
-    </a>
+    <!-- ❤️ CHRISTMAS WITH PURPOSE — numbers are set in the GIVING block in the script at the bottom -->
+    <div class="giving" id="giving">
+        <h2>❤️ Christmas with Purpose</h2>
+        <p>Every visit helps us support <strong>Compass Academy</strong>, a school for amazing kids with special needs.</p>
 
-    <a class="link-button" href="#" onclick="trackAndGo('play_heist', 'https://thoward76-png.github.io/home-alone-bay-hill-drive-game/')">
-        The Bay Hill Drive Heist <span class="new-badge">NEW!</span>
-    </a>
+        <div id="giveTotalWrap">
+            <div class="give-total" id="giveTotal">$0</div>
+            <div class="give-total-label">given by our visitors since <span id="giveSince"></span></div>
+        </div>
 
-    <a class="link-button" href="#" onclick="trackAndGo('play_scavenger', 'homealoneonbayhill_findit_1.html')">
-        Game 1 – Scavenger Hunt
-    </a>
+        <div class="give-stats" id="giveStats"></div>
 
-    <a class="link-button" href="#" onclick="trackAndGo('play_trivia', 'homealoneonbayhill_findit_2.html')">
-        Game 2 – Trivia Game
-    </a>
+        <div class="progress" id="giveProgress">
+            <span id="giveProgressText"></span>
+            <div class="bar"><div id="giveBar"></div></div>
+        </div>
 
-    <!-- ✅ NEW STRUCTURE -->
-    <div class="section-title">📰 Latest News & Media</div>
+        <div class="give-history" id="giveHistory"></div>
 
-    <!-- Facebook stays in Latest -->
-    <a class="link-button" href="https://www.facebook.com/share/1CsF7r5wZN/" target="_blank" onclick="track('click_facebook')">
-        Visit Our Facebook Page
-    </a>
-
-    <!-- https://www.tiktok.com/@juan_awesome77/video/7584246934089583886?_r=1&_t=ZP-92GAkS5uNLS -->
-    <!-- TikTok Juan Awesome video -->
-    <a class="link-button" href="https://www.tiktok.com/@juan_awesome77/video/7584246934089583886?_r=1&_t=ZP-92GAkS5uNLS" target="_blank" onclick="track('click_tiktok')">
-        TikTok Juan Awesome Video
-    </a>
-
-    <!-- New links requested -->
-    <a class="link-button" href="https://www.youtube.com/watch?v=S943S5fzK_I"
-       target="_blank" onclick="track('click_channel5_501 Life')">
-        Conway Channel 5 - 501 Life Magazine Interview
-    </a>
-    
-    <!-- New links requested -->
-    <a class="link-button" href="https://www.instagram.com/reel/DSNuzzfjhCd/?igsh=MW1nMWdjZ2tpbHhkYg%3D%3D"
-       target="_blank" onclick="track('click_uca_channel6_instagram')">
-        UCA Channel 6 Interview (Instagram)
-    </a>
-
-    <a class="link-button" href="https://501lifemag.com/conways-home-alone-home-starring-tim-and-angie-howard/"
-       target="_blank" onclick="track('click_501life')">
-        501Life Magazine Feature
-    </a>
-
-    <a class="link-button" href="https://aymag.com/conway-home-alone-house/"
-       target="_blank" onclick="track('click_aymag')">
-        AY Magazine Feature
-    </a>
-
-    <a class="link-button" href="https://www.tiktok.com/t/ZP8UyaDDa/"
-       target="_blank" onclick="track('click_scheduling_adventures_tiktok')">
-        Scheduling Adventures (TikTok)
-    </a>
-
-    <div class="section-title">📺 Past Media</div>
-
-    <a class="link-button" href="https://www.thv11.com/video/life/holidays/this-home-alone-inspired-house-turns-into-christmas-destination/91-d48a7e87-3a20-40ea-9069-0f427773aaca"
-       target="_blank" onclick="track('click_kthv')">
-        KTHV Interview
-    </a>
-
-    <a class="link-button" href="https://katv.com/community/little-rock-arc/conway-family-transforms-home-into-home-alone-holiday-wonderland-angie-howard-talks-with-little-rock-arc-about-the-display-tiktok#"
-       target="_blank" onclick="track('click_katv')">
-        KATV Interview
-    </a>
-
-    <a class="link-button" href="https://www.fox16.com/video/%e2%80%98home-alone%e2%80%99-house-in-conway-brings-movie-fans-to-central-arkansas/10320795/"
-       target="_blank" onclick="track('click_fox16')">
-        Fox 16 News Interview
-    </a>
-
-    <div class="donation-box">
-        <h2 style="color:darkred;margin-bottom:10px;">❤️ Support a Local Cause</h2>
-        <p style="margin:0 10px 10px 10px;">
-            Many visitors asked how they could honor our efforts — so this year,
-            if you feel led, please consider giving to:
-            <br><strong>Compass Academy</strong>
-            A school supporting amazing kids with special needs.
-        </p>
-
+        <p style="margin-top:14px;"><strong>If you feel led, give directly:</strong></p>
         <div class="donation-buttons">
             <a href="https://account.venmo.com/u/Compass-Academy" target="_blank" onclick="track('support_venmo')">Venmo</a>
             <a href="https://cash.app/$EmandChan?qr=1" target="_blank" onclick="track('support_cashapp')">Cash App</a>
         </div>
+        <div class="give-updated" id="giveUpdated"></div>
     </div>
+
+    <div class="section-title" id="games">🎮 Play the Games</div>
+    <a class="link-button" href="homealoneonbayhill_findit_1.html" data-track="play_scavenger">
+        🔎 Search & Find <small>Spot the decorations and collect 100 points</small>
+    </a>
+    <a class="link-button" href="homealoneonbayhill_findit_2.html" data-track="play_trivia">
+        🎄 Home Alone Trivia <small>10 questions. Miss one? Retry just those.</small>
+    </a>
+    <a class="link-button" href="https://thoward76-png.github.io/home_alone_wet_bandits_game/" data-track="play_wetbandits">
+        🪤 Wet Bandits Return <small>Make your choices and stop the Wet Bandits</small>
+    </a>
+    <a class="link-button" href="https://thoward76-png.github.io/home-alone-bay-hill-drive-game/" data-track="play_heist">
+        🚐 Bay Hill Drive Heist <small>Pick your difficulty and see how it ends</small>
+    </a>
+
+    <div class="section-title">📰 News & Media</div>
+    <a class="link-button" href="https://www.facebook.com/share/1CsF7r5wZN/" target="_blank" onclick="track('click_facebook')">
+        Visit Our Facebook Page
+    </a>
+    <a class="link-button" href="https://www.tiktok.com/@juan_awesome77/video/7584246934089583886?_r=1&_t=ZP-92GAkS5uNLS" target="_blank" onclick="track('click_tiktok')">
+        TikTok Juan Awesome Video
+    </a>
+    <a class="link-button" href="https://www.youtube.com/watch?v=S943S5fzK_I" target="_blank" onclick="track('click_channel5_501 Life')">
+        Conway Channel 5 – 501 Life Interview
+    </a>
+    <a class="link-button" href="https://www.instagram.com/reel/DSNuzzfjhCd/?igsh=MW1nMWdjZ2tpbHhkYg%3D%3D" target="_blank" onclick="track('click_uca_channel6_instagram')">
+        UCA Channel 6 Interview (Instagram)
+    </a>
+    <a class="link-button" href="https://501lifemag.com/conways-home-alone-home-starring-tim-and-angie-howard/" target="_blank" onclick="track('click_501life')">
+        501Life Magazine Feature
+    </a>
+    <a class="link-button" href="https://aymag.com/conway-home-alone-house/" target="_blank" onclick="track('click_aymag')">
+        AY Magazine Feature
+    </a>
+    <a class="link-button" href="https://www.tiktok.com/t/ZP8UyaDDa/" target="_blank" onclick="track('click_scheduling_adventures_tiktok')">
+        Scheduling Adventures (TikTok)
+    </a>
+    <a class="link-button" href="https://www.thv11.com/video/life/holidays/this-home-alone-inspired-house-turns-into-christmas-destination/91-d48a7e87-3a20-40ea-9069-0f427773aaca" target="_blank" onclick="track('click_kthv')">
+        KTHV Interview
+    </a>
+    <a class="link-button" href="https://katv.com/community/little-rock-arc/conway-family-transforms-home-into-home-alone-holiday-wonderland-angie-howard-talks-with-little-rock-arc-about-the-display-tiktok#" target="_blank" onclick="track('click_katv')">
+        KATV Interview
+    </a>
+    <a class="link-button" href="https://www.fox16.com/video/%e2%80%98home-alone%e2%80%99-house-in-conway-brings-movie-fans-to-central-arkansas/10320795/" target="_blank" onclick="track('click_fox16')">
+        Fox 16 News Interview
+    </a>
 
     <div id="stats-box">
         🎯 Visitors Tonight: <span id="visitorsTonight">0</span><br>
         ⭐ Season Total: <span id="totalVisitors">0</span><br>
         🕹 Total Game Plays: <span id="totalGamePlays">0</span><br>
         💚 Supporters: <span id="supporters">0</span><br>
-        🗳️ Votes Cast: <span id="voteClicks">0</span>
+        🗳️ Voting Link Clicks (historical): <span id="voteClicks">0</span>
+        <p class="stats-note">Counts come from our site tracker and may include link clicks rather than unique visitors or completed games.</p>
     </div>
 
     <footer>
@@ -295,6 +269,58 @@
 </div>
 
 <script>
+/* ===================== ❤️ GIVING NUMBERS — EDIT HERE =====================
+   Update these as the season goes. Leave a value as null to hide that item.
+   - history: one line per season (oldest first). Add this season when known.
+   - seasonGoal: set a number to show the progress bar, or null to hide it.
+   ======================================================================= */
+const GIVING = {
+    since: "2024",              // first year you started giving
+    history: [
+        // { year: 2024, amount: 0 },
+        // { year: 2025, amount: 0 },
+    ],
+    seasonRaised: null,         // 2026 so far, e.g. 850
+    seasonGoal: null,           // e.g. 2000
+    families: null,             // optional extra stat, e.g. number of students helped
+    familiesLabel: "students supported",
+    updated: ""                 // e.g. "Nov 20, 2026"
+};
+/* ======================================================================= */
+
+const usd = n => "$" + Math.round(n).toLocaleString("en-US");
+
+function renderGiving() {
+    const past = GIVING.history.reduce((s, h) => s + (Number(h.amount) || 0), 0);
+    const total = past + (Number(GIVING.seasonRaised) || 0);
+    const wrap = document.getElementById("giveTotalWrap");
+    if (total > 0) {
+        document.getElementById("giveSince").textContent = GIVING.since;
+        // count-up animation
+        const el = document.getElementById("giveTotal"); const start = performance.now();
+        const step = now => { const p = Math.min(1, (now - start) / 1500); el.textContent = usd(total * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); };
+        requestAnimationFrame(step);
+    } else { wrap.style.display = "none"; }
+
+    const stats = [];
+    if (GIVING.seasonRaised != null) stats.push([usd(GIVING.seasonRaised), "given in 2026"]);
+    if (GIVING.history.length) stats.push([String(GIVING.history.length + (GIVING.seasonRaised != null ? 1 : 0)), "Christmas seasons of giving"]);
+    if (GIVING.families != null) stats.push([String(GIVING.families), GIVING.familiesLabel]);
+    document.getElementById("giveStats").innerHTML = stats.map(s => `<div class="give-stat"><b>${s[0]}</b><span>${s[1]}</span></div>`).join("");
+
+    const prog = document.getElementById("giveProgress");
+    if (GIVING.seasonGoal && GIVING.seasonRaised != null) {
+        const pct = Math.min(100, GIVING.seasonRaised / GIVING.seasonGoal * 100);
+        document.getElementById("giveProgressText").textContent = `2026 goal: ${usd(GIVING.seasonRaised)} of ${usd(GIVING.seasonGoal)}`;
+        setTimeout(() => document.getElementById("giveBar").style.width = pct + "%", 200);
+    } else { prog.style.display = "none"; }
+
+    document.getElementById("giveHistory").innerHTML = GIVING.history
+        .filter(h => h.amount != null).map(h => `${h.year}: <strong>${usd(h.amount)}</strong>`).join(" &nbsp;·&nbsp; ");
+    if (GIVING.updated) document.getElementById("giveUpdated").textContent = "Updated " + GIVING.updated;
+}
+renderGiving();
+
 //const scriptURL = "https://script.google.com/macros/s/AKfycbwksAKDDe9cUQ1tfuMjtC46MYklu4S8UgZgfs4ybPNd_mxcX48ZFSBqnESOR9eB364/exec";
 const scriptURL = "https://script.google.com/macros/s/AKfycbzjEVni6BFj2GedW2SDwGjeoorRE9ork-lzIfZ0L_PMQfyuxVS_iM1OsNi9HJNPPzk/exec";
 
@@ -305,18 +331,16 @@ function track(eventName) {
     }).catch(console.error);
 }
 
-/* Restoring this so game links work + track */
-function trackAndGo(eventName, url) {
-    track(eventName);
-    setTimeout(() => { window.location.href = url; }, 300);
-}
+document.querySelectorAll('a[data-track]').forEach(link => {
+    link.addEventListener('click', () => track(link.dataset.track));
+});
 
 function updateStats() {
     fetch(scriptURL)
         .then(r => r.json())
         .then(d => {
-            document.getElementById("visitorsTonight").innerText = d.visitorsTonight ?? 0;
-            document.getElementById("totalVisitors").innerText = d.totalVisitors ?? 0;
+            document.getElementById("visitorsTonight").innerText = d.visitorsTonight ?? "—";
+            document.getElementById("totalVisitors").innerText = d.totalVisitors ?? "—";
             document.getElementById("totalGamePlays").innerText = d.totalGamePlays ?? 0;
             document.getElementById("supporters").innerText = d.supporters ?? 0;
             document.getElementById("voteClicks").innerText = d.voteClicks ?? 0;
