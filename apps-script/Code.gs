@@ -1,8 +1,8 @@
 /**
  * Home Alone on Bay Hill: site control panel.
  * Lives inside a Google Sheet (Extensions → Apps Script).
- *   GET  → returns the Control tab + favorite-character vote counts (read by the website)
- *   POST → saves votes, suggestions and feedback from have-your-say.html
+ *   GET  → returns the Control tab (read by the website). Visitor answers are never sent back out.
+ *   POST → saves answers from have-your-say.html into three tabs: Favorites, Suggestions, Feedback
  * Run setup() once to create the tabs.
  */
 
@@ -39,11 +39,7 @@ function setup() {
     c.setColumnWidth(1, 190); c.setColumnWidth(2, 260); c.setColumnWidth(3, 520);
     c.setFrozenRows(1);
   }
-  if (!ss.getSheetByName('Votes')) {
-    const v = ss.insertSheet('Votes');
-    v.appendRow(['when', 'type', 'choice', 'text', 'name']);
-    v.getRange('1:1').setFontWeight('bold'); v.setFrozenRows(1);
-  }
+  Object.keys(TABS).forEach(t => tab(t));
 }
 
 function doGet() {
@@ -54,14 +50,7 @@ function doGet() {
     if (val instanceof Date) val = Utilities.formatDate(val, 'America/Chicago', 'yyyy-MM-dd');
     if (r[0]) control[String(r[0]).trim()] = String(val).trim();
   });
-  const votes = {};
-  const vs = ss.getSheetByName('Votes');
-  if (vs.getLastRow() > 1) {
-    vs.getRange(2, 2, vs.getLastRow() - 1, 2).getValues().forEach(r => {
-      if (r[0] === 'favorite' && r[1]) votes[r[1]] = (votes[r[1]] || 0) + 1;
-    });
-  }
-  return ContentService.createTextOutput(JSON.stringify({ control, votes }))
+  return ContentService.createTextOutput(JSON.stringify({ control }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -69,14 +58,42 @@ function doPost(e) {
   const clip = (s, n) => String(s || '').replace(/^[=+\-@]/, "'").slice(0, n);   // block spreadsheet formulas
   let d = {};
   try { d = JSON.parse(e.postData.contents); } catch (err) { return ok(); }
-  if (['favorite', 'suggest', 'feedback'].indexOf(d.type) < 0) return ok();
+  const name = TYPE_TO_TAB[d.type];
+  if (!name) return ok();
   const lock = LockService.getScriptLock();
   lock.waitLock(5000);
   try {
-    SpreadsheetApp.getActive().getSheetByName('Votes')
-      .appendRow([new Date(), d.type, clip(d.choice, 120), clip(d.text, 1000), clip(d.name, 40)]);
+    const row = d.type === 'feedback'
+      ? [new Date(), clip(d.text, 1000), clip(d.name, 40)]
+      : [new Date(), clip(d.choice, 120), clip(d.text, 500), clip(d.name, 40)];
+    tab(name).appendRow(row);
   } finally { lock.releaseLock(); }
   return ok();
+}
+
+/* One tab per form, created automatically the first time it's needed */
+const TABS = {
+  'Favorites':   ['When', 'Favorite part', 'Why', 'Name', 'Notes (yours)'],
+  'Suggestions': ['When', 'Character or scene', 'Why', 'Name', 'Notes (yours)'],
+  'Feedback':    ['When', 'Feedback', 'Name', 'Notes (yours)']
+};
+const TYPE_TO_TAB = { favorite: 'Favorites', suggest: 'Suggestions', feedback: 'Feedback' };
+
+function tab(name) {
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(name);
+  if (!sh) {
+    sh = ss.insertSheet(name);
+    const h = TABS[name];
+    sh.getRange(1, 1, 1, h.length).setValues([h]).setFontWeight('bold').setBackground('#fff2cc');
+    sh.setFrozenRows(1);
+    sh.setColumnWidth(1, 140);
+    sh.setColumnWidth(2, 260);
+    sh.setColumnWidth(3, 320);
+    sh.getRange('A:A').setNumberFormat('ddd mmm d, h:mm am/pm');
+    sh.getRange('B:D').setWrap(true);
+  }
+  return sh;
 }
 
 function ok() { return ContentService.createTextOutput('ok'); }

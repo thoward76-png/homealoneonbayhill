@@ -92,15 +92,6 @@ window.BAYHILL.send = function (payload) {
         .card { background: #fff8e6; border: 2px solid darkgreen; border-radius: 10px; padding: 16px 14px; margin: 18px 0; text-align: left; }
         .card h2 { color: darkred; font-size: 21px; margin: 0 0 4px; text-align: center; }
         .card p.hint { text-align: center; font-size: 14px; color: #555; margin: 0 0 12px; }
-        .opt { display: flex; align-items: center; gap: 10px; width: 100%; box-sizing: border-box; margin: 7px 0; padding: 0;
-               border: 2px solid darkgreen; border-radius: 8px; background: white; font: inherit; font-size: 16px; cursor: pointer;
-               position: relative; overflow: hidden; text-align: left; min-height: 44px; }
-        .opt .fill { position: absolute; inset: 0 auto 0 0; width: 0; background: #d7ecd9; transition: width 1s ease; }
-        .opt .lbl { position: relative; flex: 1; padding: 10px 12px; }
-        .opt .pct { position: relative; padding-right: 12px; font-weight: bold; color: darkgreen; }
-        .opt.mine { border-color: darkred; }
-        .opt.mine .lbl::after { content: "  ✓ your vote"; color: darkred; font-size: 13px; font-weight: bold; }
-        .opt[disabled] { cursor: default; }
         label { display: block; font-size: 14px; font-weight: bold; margin: 10px 0 4px; color: #333; }
         input, textarea { width: 100%; box-sizing: border-box; font: inherit; font-size: 16px; padding: 10px; border: 1px solid #bba; border-radius: 6px; }
         textarea { min-height: 90px; resize: vertical; }
@@ -108,7 +99,6 @@ window.BAYHILL.send = function (payload) {
                 border: 0; border-radius: 6px; background: darkgreen; color: white; cursor: pointer; }
         .send:hover { background: darkred; }
         .thanks { text-align: center; font-weight: bold; color: darkgreen; margin-top: 10px; min-height: 1em; }
-        .total { text-align: center; font-size: 13px; color: #555; margin-top: 6px; }
         @media (max-width: 560px) { .container { margin: 10px; padding: 15px; } h1 { font-size: 25px; } }
     </style>
 </head>
@@ -116,13 +106,21 @@ window.BAYHILL.send = function (payload) {
 <div class="container">
     <a class="back" href="index.html">← Back to Home</a>
     <h1>🗳️ Have Your Say</h1>
-    <p class="lead">Angie hand-draws and paints every character in our yard. Tell us who you love, who we should add next, and how we can make the display even better.</p>
+    <p class="lead">Angie hand-draws and paints every character in our yard. Tell us what you love, who we should add next, and how we can make the display even better.</p>
 
     <div class="card">
-        <h2>⭐ Favorite Character</h2>
-        <p class="hint">One vote per phone. Tap to vote and see the results.</p>
-        <div id="poll"></div>
-        <div class="total" id="pollTotal"></div>
+        <h2>⭐ What's Your Favorite Part?</h2>
+        <p class="hint">A character, a scene, a little detail you spotted. Tell us what made you smile!</p>
+        <form id="favForm">
+            <label for="fvPick">Your favorite</label>
+            <input id="fvPick" maxlength="120" required placeholder="e.g. Marv on the balcony">
+            <label for="fvWhy">Why? (optional)</label>
+            <textarea id="fvWhy" maxlength="500"></textarea>
+            <label for="fvName">Your first name (optional)</label>
+            <input id="fvName" maxlength="40">
+            <button class="send" type="submit">Send</button>
+            <div class="thanks" id="fvThanks" aria-live="polite"></div>
+        </form>
     </div>
 
     <div class="card">
@@ -156,31 +154,6 @@ window.BAYHILL.send = function (payload) {
 
 <script>
 const B = window.BAYHILL;
-const KEY = "bayhill_vote_2026";
-let tally = {};
-const store = { get: () => { try { return localStorage.getItem(KEY); } catch (e) { return null; } },
-                set: v => { try { localStorage.setItem(KEY, v); } catch (e) {} } };
-
-function drawPoll() {
-    const mine = store.get(), voted = !!mine;
-    const total = B.characters.reduce((s, c) => s + (tally[c] || 0), 0);
-    document.getElementById("poll").innerHTML = B.characters.map(c => {
-        const n = tally[c] || 0, pct = total ? Math.round(n / total * 100) : 0;
-        return `<button class="opt${c === mine ? " mine" : ""}" type="button" data-c="${c}" ${voted ? "disabled" : ""}>
-            <span class="fill" data-w="${voted ? pct : 0}"></span><span class="lbl">${c}</span>${voted ? `<span class="pct">${pct}%</span>` : ""}</button>`;
-    }).join("");
-    document.getElementById("pollTotal").textContent = voted && total ? `${total.toLocaleString()} votes so far` : "";
-    setTimeout(() => document.querySelectorAll(".opt .fill").forEach(f => f.style.width = f.dataset.w + "%"), 50);
-    document.querySelectorAll(".opt").forEach(b => b.onclick = () => vote(b.dataset.c));
-}
-function vote(c) {
-    if (store.get()) return;
-    store.set(c); tally[c] = (tally[c] || 0) + 1; drawPoll();
-    B.send({ type: "favorite", choice: c }).catch(() => {});
-}
-B.getControl().then(d => { if (d && d.votes) tally = d.votes; drawPoll(); });
-drawPoll();
-
 function wire(formId, thanksId, build) {
     const f = document.getElementById(formId);
     f.onsubmit = e => {
@@ -191,6 +164,7 @@ function wire(formId, thanksId, build) {
                        .catch(() => { t.textContent = "Hmm, that didn't send. Please try again."; });
     };
 }
+wire("favForm", "fvThanks", () => ({ type: "favorite", choice: fvPick.value, text: fvWhy.value, name: fvName.value }));
 wire("suggestForm", "sgThanks", () => ({ type: "suggest", choice: sgIdea.value, text: sgWhy.value, name: sgName.value }));
 wire("fbForm", "fbThanks", () => ({ type: "feedback", text: fbText.value, name: fbName.value }));
 </script>
