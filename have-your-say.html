@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Have Your Say - Home Alone on Bay Hill</title>
+    <script src="config.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: url('AdobeStock_375652874.jpeg') no-repeat center center fixed;
+               background-size: cover; color: black; text-align: center; }
+        .container { max-width: 560px; margin: 22px auto; padding: 22px; background: rgba(255,255,255,.93);
+                     border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.5); }
+        h1 { color: darkred; font-size: 30px; margin: 0 0 6px; }
+        .back { display: inline-block; margin-bottom: 14px; color: darkgreen; font-weight: bold; text-decoration: none; }
+        .lead { font-size: 16px; line-height: 1.5; color: #333; margin: 0 0 8px; }
+        .card { background: #fff8e6; border: 2px solid darkgreen; border-radius: 10px; padding: 16px 14px; margin: 18px 0; text-align: left; }
+        .card h2 { color: darkred; font-size: 21px; margin: 0 0 4px; text-align: center; }
+        .card p.hint { text-align: center; font-size: 14px; color: #555; margin: 0 0 12px; }
+        .opt { display: flex; align-items: center; gap: 10px; width: 100%; box-sizing: border-box; margin: 7px 0; padding: 0;
+               border: 2px solid darkgreen; border-radius: 8px; background: white; font: inherit; font-size: 16px; cursor: pointer;
+               position: relative; overflow: hidden; text-align: left; min-height: 44px; }
+        .opt .fill { position: absolute; inset: 0 auto 0 0; width: 0; background: #d7ecd9; transition: width 1s ease; }
+        .opt .lbl { position: relative; flex: 1; padding: 10px 12px; }
+        .opt .pct { position: relative; padding-right: 12px; font-weight: bold; color: darkgreen; }
+        .opt.mine { border-color: darkred; }
+        .opt.mine .lbl::after { content: "  ✓ your vote"; color: darkred; font-size: 13px; font-weight: bold; }
+        .opt[disabled] { cursor: default; }
+        label { display: block; font-size: 14px; font-weight: bold; margin: 10px 0 4px; color: #333; }
+        input, textarea { width: 100%; box-sizing: border-box; font: inherit; font-size: 16px; padding: 10px; border: 1px solid #bba; border-radius: 6px; }
+        textarea { min-height: 90px; resize: vertical; }
+        .send { display: block; width: 100%; margin-top: 12px; padding: 12px; font: inherit; font-size: 17px; font-weight: bold;
+                border: 0; border-radius: 6px; background: darkgreen; color: white; cursor: pointer; }
+        .send:hover { background: darkred; }
+        .thanks { text-align: center; font-weight: bold; color: darkgreen; margin-top: 10px; min-height: 1em; }
+        .total { text-align: center; font-size: 13px; color: #555; margin-top: 6px; }
+        @media (max-width: 560px) { .container { margin: 10px; padding: 15px; } h1 { font-size: 25px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="index.html">← Back to Home</a>
+    <h1>🗳️ Have Your Say</h1>
+    <p class="lead">Angie hand-draws and paints every character in our yard. Tell us who you love, who we should add next, and how we can make the display even better.</p>
+
+    <div class="card">
+        <h2>⭐ Favorite Character</h2>
+        <p class="hint">One vote per phone. Tap to vote and see the results.</p>
+        <div id="poll"></div>
+        <div class="total" id="pollTotal"></div>
+    </div>
+
+    <div class="card">
+        <h2>💡 Who Should We Add Next?</h2>
+        <p class="hint">Any Home Alone character or scene. Big or small, we read them all!</p>
+        <form id="suggestForm">
+            <label for="sgIdea">Character or scene</label>
+            <input id="sgIdea" maxlength="120" required placeholder="e.g. Kevin's tarantula, Axel">
+            <label for="sgWhy">Why? (optional)</label>
+            <textarea id="sgWhy" maxlength="500"></textarea>
+            <label for="sgName">Your first name (optional)</label>
+            <input id="sgName" maxlength="40">
+            <button class="send" type="submit">Send Suggestion</button>
+            <div class="thanks" id="sgThanks" aria-live="polite"></div>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>🎄 Help Us Improve</h2>
+        <p class="hint">Parking, traffic, the games, this website: anything that would make your visit better.</p>
+        <form id="fbForm">
+            <label for="fbText">Your feedback</label>
+            <textarea id="fbText" maxlength="1000" required></textarea>
+            <label for="fbName">Your first name (optional)</label>
+            <input id="fbName" maxlength="40">
+            <button class="send" type="submit">Send Feedback</button>
+            <div class="thanks" id="fbThanks" aria-live="polite"></div>
+        </form>
+    </div>
+</div>
+
+<script>
+const B = window.BAYHILL;
+const KEY = "bayhill_vote_2026";
+let tally = {};
+const store = { get: () => { try { return localStorage.getItem(KEY); } catch (e) { return null; } },
+                set: v => { try { localStorage.setItem(KEY, v); } catch (e) {} } };
+
+function drawPoll() {
+    const mine = store.get(), voted = !!mine;
+    const total = B.characters.reduce((s, c) => s + (tally[c] || 0), 0);
+    document.getElementById("poll").innerHTML = B.characters.map(c => {
+        const n = tally[c] || 0, pct = total ? Math.round(n / total * 100) : 0;
+        return `<button class="opt${c === mine ? " mine" : ""}" type="button" data-c="${c}" ${voted ? "disabled" : ""}>
+            <span class="fill" data-w="${voted ? pct : 0}"></span><span class="lbl">${c}</span>${voted ? `<span class="pct">${pct}%</span>` : ""}</button>`;
+    }).join("");
+    document.getElementById("pollTotal").textContent = voted && total ? `${total.toLocaleString()} votes so far` : "";
+    setTimeout(() => document.querySelectorAll(".opt .fill").forEach(f => f.style.width = f.dataset.w + "%"), 50);
+    document.querySelectorAll(".opt").forEach(b => b.onclick = () => vote(b.dataset.c));
+}
+function vote(c) {
+    if (store.get()) return;
+    store.set(c); tally[c] = (tally[c] || 0) + 1; drawPoll();
+    B.send({ type: "favorite", choice: c }).catch(() => {});
+}
+B.getControl().then(d => { if (d && d.votes) tally = d.votes; drawPoll(); });
+drawPoll();
+
+function wire(formId, thanksId, build) {
+    const f = document.getElementById(formId);
+    f.onsubmit = e => {
+        e.preventDefault();
+        const t = document.getElementById(thanksId);
+        if (!B.controlURL) { t.textContent = "Coming soon! This form isn't connected yet."; return; }
+        B.send(build()).then(() => { t.textContent = "Thank you! We got it. 🎄"; f.reset(); })
+                       .catch(() => { t.textContent = "Hmm, that didn't send. Please try again."; });
+    };
+}
+wire("suggestForm", "sgThanks", () => ({ type: "suggest", choice: sgIdea.value, text: sgWhy.value, name: sgName.value }));
+wire("fbForm", "fbThanks", () => ({ type: "feedback", text: fbText.value, name: fbName.value }));
+</script>
+</body>
+</html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Alone on Bay Hill - 2026</title>
+    <script src="config.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -136,6 +137,45 @@
         .donation-buttons a:hover { background: #990000; }
         .give-updated { font-size: 12px; color: #666; margin-top: 6px; }
 
+
+        /* 🌙 Tonight status card */
+        .status { border-radius: 10px; padding: 14px 14px 12px; margin: 4px 0 18px; color: white;
+                  background: linear-gradient(160deg, #0d2a4a, #123d2a); box-shadow: 0 2px 10px rgba(0,0,0,.35); }
+        .status.on { background: linear-gradient(160deg, #0f5a2c, #0b3b1d); }
+        .status.closed { background: linear-gradient(160deg, #8a1010, #4d0808); }
+        .status-head { font-size: 21px; font-weight: bold; line-height: 1.3; }
+        .status-head .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; background: #5dff8a;
+                            box-shadow: 0 0 8px #5dff8a; margin-right: 7px; animation: blink 1.6s ease-in-out infinite; }
+        @keyframes blink { 50% { opacity: .35; } }
+        .status-sub { font-size: 15px; color: #e8efe9; margin-top: 4px; }
+        .clock { display: flex; justify-content: center; gap: 8px; margin: 10px 0 4px; }
+        .clock div { background: rgba(255,255,255,.12); border-radius: 8px; min-width: 62px; padding: 6px 4px; }
+        .clock b { display: block; font-size: 28px; font-variant-numeric: tabular-nums; }
+        .clock span { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #cfe; }
+        .xmas { margin-top: 8px; font-size: 15px; color: #ffe7a3; font-weight: bold; }
+        .alert { background: #ffe7a3; color: #4a2d00; border-radius: 8px; padding: 9px 10px; margin-top: 10px; font-size: 15px; font-weight: bold; }
+        .wx { margin-top: 10px; padding-top: 9px; border-top: 1px solid rgba(255,255,255,.2); font-size: 15px; color: #f2f6f3; }
+        .wx .warn { display: block; margin-top: 5px; color: #ffd27a; font-weight: bold; }
+
+        /* 🎬 Today's spotlight button */
+        .link-button.spot { background: linear-gradient(90deg, #8b0000, #b8860b); border: 2px solid #ffd700; }
+        .link-button.spot:hover { background: #5a0000; }
+
+        /* ❤️ give-in-honor pickers */
+        .pick-label { font-size: 14px; font-weight: bold; color: #333; margin: 12px 0 4px; }
+        .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; }
+        .chips button { font: inherit; font-size: 15px; padding: 8px 12px; border-radius: 20px; border: 2px solid darkgreen;
+                        background: white; color: darkgreen; cursor: pointer; }
+        .chips button.sel { background: darkgreen; color: white; }
+        .give-note { font-size: 13px; color: #555; margin: 6px 0 0; }
+        .teams { text-align: left; margin: 14px 4px 4px; font-size: 14px; }
+        .teams h3 { text-align: center; font-size: 16px; color: darkred; margin: 0 0 6px; }
+        .team-row { display: flex; align-items: center; gap: 8px; margin: 5px 0; }
+        .team-row .nm { width: 112px; flex: none; }
+        .team-row .tb { flex: 1; height: 12px; background: #e8e0cc; border-radius: 6px; overflow: hidden; }
+        .team-row .tb div { height: 100%; background: linear-gradient(90deg, darkred, #d64545); width: 0; transition: width 1.2s ease; }
+        .team-row .amt { width: 58px; text-align: right; font-weight: bold; }
+
         #stats-box { margin-top: 30px; font-size: 17px; line-height: 1.6; }
         .stats-note { font-size: 12px; color: #555; line-height: 1.4; margin: 8px 0; }
         footer { margin-top: 15px; font-size: 14px; color: #333; }
@@ -146,7 +186,7 @@
             .give-total { font-size: 40px; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .vote-banner::before, .vote-banner::after, .giving::before { animation: none; }
+            .vote-banner::before, .vote-banner::after, .giving::before, .status-head .dot { animation: none; }
             .bar div { transition: none; }
         }
     </style>
@@ -177,6 +217,18 @@
         </a>
     </div> -->
 
+    <!-- 🌙 TONIGHT STATUS: driven by config.js + the Control sheet -->
+    <div class="status" id="status" aria-live="polite">
+        <div class="status-head" id="stHead">Home Alone on Bay Hill</div>
+        <div class="status-sub" id="stSub"></div>
+        <div class="clock" id="stClock" hidden></div>
+        <div class="xmas" id="stXmas"></div>
+        <div class="alert" id="stAlert" hidden></div>
+        <div class="wx" id="stWx" hidden></div>
+    </div>
+
+    <a class="link-button spot" id="todaySpot" href="spotlights.html" data-track="click_spotlight_today" hidden></a>
+
     <p class="intro">Welcome to our family's Home Alone-inspired Christmas display! Explore the decorations, test your movie knowledge, and try our interactive adventures. All games are free to play.</p>
 
     <!-- ❤️ CHRISTMAS WITH PURPOSE — numbers are set in the GIVING block in the script at the bottom -->
@@ -199,10 +251,16 @@
         <div class="give-history" id="giveHistory"></div>
 
         <p style="margin-top:14px;"><strong>If you feel led, give directly:</strong></p>
+        <div class="pick-label">Pick an amount</div>
+        <div class="chips" id="amtChips"></div>
+        <div class="pick-label">Give in honor of a character <span style="font-weight:normal">(optional)</span></div>
+        <div class="chips" id="teamChips"></div>
         <div class="donation-buttons">
-            <a href="https://account.venmo.com/u/Compass-Academy" target="_blank" onclick="track('support_venmo')">Venmo</a>
-            <a href="https://cash.app/$EmandChan?qr=1" target="_blank" onclick="track('support_cashapp')">Cash App</a>
+            <a id="venmoBtn" href="https://account.venmo.com/u/Compass-Academy" target="_blank" onclick="track('support_venmo')">Venmo</a>
+            <a id="cashBtn" href="https://cash.app/$EmandChan?qr=1" target="_blank" onclick="track('support_cashapp')">Cash App</a>
         </div>
+        <p class="give-note" id="giveNote"></p>
+        <div class="teams" id="teams" hidden></div>
         <div class="give-updated" id="giveUpdated"></div>
     </div>
 
@@ -218,6 +276,16 @@
     </a>
     <a class="link-button" href="https://thoward76-png.github.io/home-alone-bay-hill-drive-game/" data-track="play_heist">
         🚐 Bay Hill Drive Heist <small>Pick your difficulty and see how it ends</small>
+    </a>
+
+    <div class="section-title">🎬 Character Spotlights</div>
+    <a class="link-button" href="spotlights.html" data-track="click_spotlights">
+        Watch the Spotlights <small>A new character from the yard every night until Thanksgiving</small>
+    </a>
+
+    <div class="section-title">🗳️ Have Your Say</div>
+    <a class="link-button" href="have-your-say.html" data-track="click_haveyoursay">
+        Vote, Suggest & Share <small>Pick your favorite character or suggest who we add next</small>
     </a>
 
     <div class="section-title">📰 News & Media</div>
@@ -320,6 +388,179 @@ function renderGiving() {
     if (GIVING.updated) document.getElementById("giveUpdated").textContent = "Updated " + GIVING.updated;
 }
 renderGiving();
+
+/* ===================== 🌙 TONIGHT STATUS + WEATHER ===================== */
+const B = window.BAYHILL;
+const $ = id => document.getElementById(id);
+const hm = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+const fmt12 = t => { let [h, m] = t.split(":").map(Number); const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; return m ? `${h}:${String(m).padStart(2,"0")} ${ap}` : `${h} ${ap}`; };
+let CTL = {};          // values from the Control sheet (alerts, giving, teams)
+let clockTarget = null;
+
+function alertForToday(today) {
+    const type = (CTL.alert_type || "").toLowerCase().trim();
+    if (!type || !CTL.alert_message) return null;
+    if (CTL.alert_date && CTL.alert_date !== today) return null;   // dated alerts only show that night
+    return { type, msg: CTL.alert_message };
+}
+
+function renderStatus() {
+    const { ymd: today, mins } = B.now();
+    const on = hm(B.lightsOn), off = hm(B.lightsOff);
+    const card = $("status"); card.className = "status";
+    const al = alertForToday(today);
+    let head = "", sub = "", target = null, wxNight = today;
+
+    if (today < B.openingNight || (today === B.openingNight && mins < on)) {
+        head = "🎄 Opening Night: Thanksgiving";
+        sub = `Thursday, Nov 26 · lights on at ${fmt12(B.lightsOn)}`;
+        target = B.at(B.openingNight, B.lightsOn);
+        wxNight = B.openingNight;
+    } else if (today > B.lastNight) {
+        head = "Thanks for a wonderful season!";
+        sub = "The lights are packed away. See you next Christmas!";
+    } else if (al && al.type === "closed") {
+        card.classList.add("closed");
+        head = "Closed tonight";
+        sub = al.msg;
+        wxNight = null;
+    } else if (mins < on) {
+        head = `Lights on tonight at ${fmt12(B.lightsOn)}`;
+        sub = `Open nightly ${fmt12(B.lightsOn)} – ${fmt12(B.lightsOff)}, weather permitting`;
+        target = B.at(today, B.lightsOn);
+    } else if (mins < off) {
+        card.classList.add("on");
+        head = `<span class="dot"></span>The lights are ON!`;
+        sub = `Come on by. We're open until ${fmt12(B.lightsOff)} tonight.`;
+    } else {
+        head = "Lights are off for tonight";
+        sub = `Back tomorrow at ${fmt12(B.lightsOn)}. Sleep tight, ya filthy animal.`;
+        wxNight = B.addDays(today, 1);
+    }
+    $("stHead").innerHTML = head;
+    $("stSub").textContent = sub;
+
+    const toXmas = B.dayDiff(today, today.slice(0, 4) + "-12-25");
+    $("stXmas").textContent = toXmas > 1 ? `🎁 ${toXmas} days until Christmas`
+                            : toXmas === 1 ? "🎁 1 day until Christmas!" : toXmas === 0 ? "🎄 Merry Christmas!" : "";
+
+    const a = $("stAlert");
+    if (al && al.type !== "closed") { a.textContent = "📣 " + al.msg; a.hidden = false; } else a.hidden = true;
+
+    clockTarget = target; $("stClock").hidden = !target; tick();
+    if (wxNight) loadWeather(wxNight, wxNight === B.openingNight && today < B.openingNight);
+    else $("stWx").hidden = true;
+}
+
+function tick() {
+    if (!clockTarget) return;
+    let s = Math.max(0, Math.floor((clockTarget - Date.now()) / 1000));
+    if (s === 0) { renderStatus(); return; }
+    const parts = s >= 86400
+        ? [[Math.floor(s / 86400), "days"], [Math.floor(s % 86400 / 3600), "hrs"], [Math.floor(s % 3600 / 60), "min"], [s % 60, "sec"]]
+        : [[Math.floor(s / 3600), "hrs"], [Math.floor(s % 3600 / 60), "min"], [s % 60, "sec"]];
+    $("stClock").innerHTML = parts.map(([n, l]) => `<div><b>${String(n).padStart(2, "0")}</b><span>${l}</span></div>`).join("");
+}
+setInterval(tick, 1000);
+setInterval(renderStatus, 60000);
+
+/* Forecast for the display hours (6–10:30 PM) from Open-Meteo: free, no key */
+const WX = { 0:["☀️","Clear"],1:["🌤️","Mostly clear"],2:["⛅","Partly cloudy"],3:["☁️","Cloudy"],45:["🌫️","Foggy"],48:["🌫️","Foggy"],
+    51:["🌦️","Light drizzle"],53:["🌦️","Drizzle"],55:["🌧️","Drizzle"],56:["🧊","Freezing drizzle"],57:["🧊","Freezing drizzle"],
+    61:["🌧️","Light rain"],63:["🌧️","Rain"],65:["🌧️","Heavy rain"],66:["🧊","Freezing rain"],67:["🧊","Freezing rain"],
+    71:["🌨️","Light snow"],73:["🌨️","Snow"],75:["❄️","Heavy snow"],77:["🌨️","Snow"],80:["🌦️","Showers"],81:["🌧️","Showers"],
+    82:["⛈️","Heavy showers"],85:["🌨️","Snow showers"],86:["❄️","Snow showers"],95:["⛈️","Thunderstorms"],96:["⛈️","Thunderstorms"],99:["⛈️","Thunderstorms"] };
+let wxCache = null;
+async function loadWeather(night, isOpening) {
+    try {
+        if (!wxCache) {
+            const u = `https://api.open-meteo.com/v1/forecast?latitude=${B.lat}&longitude=${B.lon}` +
+                `&hourly=temperature_2m,precipitation_probability,weather_code,wind_gusts_10m` +
+                `&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FChicago&forecast_days=16`;
+            wxCache = await (await fetch(u)).json();
+        }
+        const h = wxCache.hourly, idx = [];
+        h.time.forEach((t, i) => { if (t.startsWith(night) && +t.slice(11, 13) >= 18 && +t.slice(11, 13) <= 22) idx.push(i); });
+        if (!idx.length) { $("stWx").hidden = true; return; }
+        const temps = idx.map(i => h.temperature_2m[i]);
+        const rain = Math.max(...idx.map(i => h.precipitation_probability[i] ?? 0));
+        const gust = Math.max(...idx.map(i => h.wind_gusts_10m[i] ?? 0));
+        const code = Math.max(...idx.map(i => h.weather_code[i] ?? 0));     // worst sky of the evening
+        const [ico, desc] = WX[code] || ["🌡️", ""];
+        const hi = Math.round(temps[0]), lo = Math.round(Math.min(...temps));
+        const label = isOpening ? "Thanksgiving night forecast" : (night === B.now().ymd ? "Tonight" : "Tomorrow night");
+        let html = `${ico} <b>${label}:</b> ${hi}°${lo !== hi ? "→" + lo + "°" : ""} · ${desc} · ${rain}% rain`;
+        let warn = "";
+        if (code >= 95) warn = "⛈️ Storms are possible. If we have to close, we'll post it right here.";
+        else if ([56,57,66,67].includes(code)) warn = "🧊 Icy roads are possible. Please check back before heading out.";
+        else if (rain >= 60) warn = "☔ Rain is likely. Check back here before you head over.";
+        else if (gust >= 35) warn = "💨 Strong wind gusts. Some inflatables may be down tonight.";
+        else if (lo <= 32) warn = "🧣 Bundle up, it'll be below freezing!";
+        if (warn) html += `<span class="warn">${warn}</span>`;
+        $("stWx").innerHTML = html; $("stWx").hidden = false;
+    } catch (e) { $("stWx").hidden = true; }
+}
+
+/* ===================== 🎬 TODAY'S SPOTLIGHT BUTTON ===================== */
+(function () {
+    const out = B.released(); if (!out.length) return;
+    const last = out[out.length - 1], isToday = last.date === B.now().ymd;
+    const b = $("todaySpot");
+    b.href = "spotlights.html#" + last.date;
+    b.innerHTML = `🎬 ${isToday ? "Today's" : "Latest"} Character Spotlight: <b>${last.name}</b><small>${last.tag || "Tap to watch"}</small>`;
+    b.hidden = false;
+})();
+
+/* ===================== ❤️ GIVE IN HONOR OF A CHARACTER ===================== */
+const VENMO_USER = "Compass-Academy", CASHTAG = "$EmandChan";
+let giveAmt = null, giveTeam = null;
+function chipRow(el, items, onPick) {
+    el.innerHTML = items.map(v => `<button type="button">${v}</button>`).join("");
+    [...el.children].forEach((btn, i) => btn.onclick = () => {
+        const was = btn.classList.contains("sel");
+        [...el.children].forEach(c => c.classList.remove("sel"));
+        if (!was) btn.classList.add("sel");
+        onPick(was ? null : items[i]); updateGiveLinks();
+    });
+}
+chipRow($("amtChips"), ["$5", "$10", "$25", "$50", "$100"], v => giveAmt = v ? Number(v.slice(1)) : null);
+chipRow($("teamChips"), B.characters, v => giveTeam = v);
+function updateGiveLinks() {
+    const note = "Christmas with Purpose 🎄" + (giveTeam ? ` Team ${giveTeam}` : "");
+    const q = new URLSearchParams({ txn: "pay", note }); if (giveAmt) q.set("amount", giveAmt);
+    $("venmoBtn").href = `https://venmo.com/${VENMO_USER}?${q}`;
+    $("cashBtn").href = `https://cash.app/${CASHTAG}${giveAmt ? "/" + giveAmt : ""}`;
+    $("giveNote").textContent = giveTeam
+        ? `Venmo will fill in "Team ${giveTeam}" for you. On Cash App, add "Team ${giveTeam}" in the note so we can count it.` : "";
+}
+updateGiveLinks();
+
+function renderTeams() {
+    const rows = B.characters.map(c => [c, Number(CTL["team:" + c]) || 0]).filter(r => r[1] > 0).sort((a, b) => b[1] - a[1]);
+    const box = $("teams"); if (!rows.length) { box.hidden = true; return; }
+    const max = rows[0][1];
+    box.innerHTML = `<h3>🏆 Team Standings</h3>` + rows.map(([n, v]) =>
+        `<div class="team-row"><span class="nm">Team ${n}</span><span class="tb"><div data-w="${v / max * 100}"></div></span><span class="amt">${usd(v)}</span></div>`).join("");
+    box.hidden = false;
+    setTimeout(() => box.querySelectorAll(".tb div").forEach(d => d.style.width = d.dataset.w + "%"), 200);
+}
+
+/* ===================== LIVE SETTINGS FROM THE CONTROL SHEET ===================== */
+renderStatus();
+B.getControl().then(d => {
+    if (!d || !d.control) return;
+    CTL = d.control;
+    const num = k => (CTL[k] === "" || CTL[k] == null) ? null : Number(CTL[k]);
+    if (CTL.giving_history) GIVING.history = String(CTL.giving_history).split(",").map(p => p.split(":"))
+        .filter(p => p.length === 2).map(([y, a]) => ({ year: y.trim(), amount: Number(a.replace(/[$,\s]/g, "")) }));
+    if (CTL.giving_since) GIVING.since = CTL.giving_since;
+    if (num("giving_raised_2026") != null) GIVING.seasonRaised = num("giving_raised_2026");
+    if (num("giving_goal_2026") != null) GIVING.seasonGoal = num("giving_goal_2026");
+    if (num("giving_extra_number") != null) { GIVING.families = num("giving_extra_number"); GIVING.familiesLabel = CTL.giving_extra_label || GIVING.familiesLabel; }
+    if (CTL.giving_updated) GIVING.updated = CTL.giving_updated;
+    $("giveTotalWrap").style.display = ""; $("giveProgress").style.display = "";
+    renderGiving(); renderTeams(); renderStatus();
+});
 
 //const scriptURL = "https://script.google.com/macros/s/AKfycbwksAKDDe9cUQ1tfuMjtC46MYklu4S8UgZgfs4ybPNd_mxcX48ZFSBqnESOR9eB364/exec";
 const scriptURL = "https://script.google.com/macros/s/AKfycbzjEVni6BFj2GedW2SDwGjeoorRE9ork-lzIfZ0L_PMQfyuxVS_iM1OsNi9HJNPPzk/exec";
