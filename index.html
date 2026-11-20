@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A Home Alone Christmas display in Conway, Arkansas, with life-size characters hand-painted by Angie Howard. Opening night is Thanksgiving. Lights on nightly 6–10:30 PM.">
+    <!-- Share preview (Facebook, texts). SITE ADDRESS: change both URLs if your site lives at a different address -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thoward76-png.github.io/">
+    <meta property="og:title" content="Home Alone on Bay Hill: 2026 Christmas Display">
+    <meta property="og:description" content="Life-size Home Alone characters, hand-painted by Angie Howard. Opening night: Thanksgiving, 6 PM. Conway, AR.">
+    <meta property="og:image" content="https://thoward76-png.github.io/media/share.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Home Alone on Bay Hill - 2026</title>
     <script src="config.js"></script>
     <script>
@@ -221,6 +231,21 @@ window.BAYHILL.send = function (payload) {
         .hero .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 9px; color: white; font-size: 14px; font-weight: bold;
                      background: linear-gradient(transparent, rgba(0,0,0,.75)); text-shadow: 0 1px 3px #000; }
 
+
+        /* 📺 As Seen On (folded) */
+        details.press { margin: 14px 0 6px; border: 2px solid darkgreen; border-radius: 8px; background: #f6fbf6; text-align: left; }
+        details.press summary { cursor: pointer; list-style: none; padding: 13px 40px 13px 14px; font-size: 18px; font-weight: bold; color: darkgreen; position: relative; }
+        details.press summary::-webkit-details-marker { display: none; }
+        details.press summary::after { content: "▾"; position: absolute; right: 14px; top: 12px; font-size: 20px; transition: transform .2s; }
+        details.press[open] summary::after { transform: rotate(180deg); }
+        details.press summary span { display: block; font-size: 13px; font-weight: normal; color: #444; margin-top: 3px; }
+        .press-list { padding: 0 10px 10px; }
+        .press-link { display: block; padding: 11px 6px; border-top: 1px solid #d6e6d6; color: #123; text-decoration: none; font-size: 16px; }
+        .press-link::after { content: " ›"; color: darkgreen; font-weight: bold; }
+        .press-link:hover { background: #e7f3e7; }
+        .where { margin-top: 6px; font-size: 14px; color: #dfe8e2; }
+        .trust { font-size: 14px; font-weight: bold; color: darkgreen; margin: 10px 0 0; }
+
         /* 🌙 Tonight status card */
         .status { border-radius: 10px; padding: 14px 14px 12px; margin: 4px 0 18px; color: white;
                   background: linear-gradient(160deg, #0d2a4a, #123d2a); box-shadow: 0 2px 10px rgba(0,0,0,.35); }
@@ -247,7 +272,7 @@ window.BAYHILL.send = function (payload) {
         /* ❤️ give-in-honor pickers */
         .pick-label { font-size: 14px; font-weight: bold; color: #333; margin: 12px 0 4px; }
         .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; }
-        .chips button { font: inherit; font-size: 15px; padding: 8px 12px; border-radius: 20px; border: 2px solid darkgreen;
+        .chips button { font: inherit; font-size: 16px; padding: 10px 12px; min-height: 44px; border-radius: 20px; border: 2px solid darkgreen;
                         background: white; color: darkgreen; cursor: pointer; }
         .chips button.sel { background: darkgreen; color: white; }
         .give-note { font-size: 13px; color: #555; margin: 6px 0 0; }
@@ -314,6 +339,7 @@ window.BAYHILL.send = function (payload) {
         <div class="status-sub" id="stSub"></div>
         <div class="clock" id="stClock" hidden></div>
         <div class="xmas" id="stXmas"></div>
+        <div class="where">📍 Bay Hill Drive · Conway, Arkansas</div>
         <div class="alert" id="stAlert" hidden></div>
         <div class="wx" id="stWx" hidden></div>
     </div>
@@ -350,6 +376,7 @@ window.BAYHILL.send = function (payload) {
             <a id="venmoBtn" href="https://account.venmo.com/u/Compass-Academy" target="_blank" onclick="track('support_venmo')">Venmo</a>
             <a id="cashBtn" href="https://cash.app/$EmandChan?qr=1" target="_blank" onclick="track('support_cashapp')">Cash App</a>
         </div>
+        <p class="trust">💯 Every gift goes straight to Compass Academy. We never handle the money.</p>
         <p class="give-note" id="giveNote"></p>
         <div class="teams" id="teams" hidden></div>
         <div class="give-updated" id="giveUpdated"></div>
@@ -379,44 +406,48 @@ window.BAYHILL.send = function (payload) {
         Share Your Ideas <small>Your favorite part, who we should add next, and feedback</small>
     </a>
 
-    <div class="section-title">📰 News & Media</div>
+    <div class="section-title">📣 Follow Along</div>
     <a class="link-button" href="https://www.facebook.com/share/1CsF7r5wZN/" target="_blank" onclick="track('click_facebook')">
-        Visit Our Facebook Page
-    </a>
-    <a class="link-button" href="https://www.tiktok.com/@juan_awesome77/video/7584246934089583886?_r=1&_t=ZP-92GAkS5uNLS" target="_blank" onclick="track('click_tiktok')">
-        TikTok Juan Awesome Video
-    </a>
-    <a class="link-button" href="https://www.youtube.com/watch?v=S943S5fzK_I" target="_blank" onclick="track('click_channel5_501 Life')">
-        Conway Channel 5 – 501 Life Interview
-    </a>
-    <a class="link-button" href="https://www.instagram.com/reel/DSNuzzfjhCd/?igsh=MW1nMWdjZ2tpbHhkYg%3D%3D" target="_blank" onclick="track('click_uca_channel6_instagram')">
-        UCA Channel 6 Interview (Instagram)
-    </a>
-    <a class="link-button" href="https://501lifemag.com/conways-home-alone-home-starring-tim-and-angie-howard/" target="_blank" onclick="track('click_501life')">
-        501Life Magazine Feature
-    </a>
-    <a class="link-button" href="https://aymag.com/conway-home-alone-house/" target="_blank" onclick="track('click_aymag')">
-        AY Magazine Feature
-    </a>
-    <a class="link-button" href="https://www.tiktok.com/t/ZP8UyaDDa/" target="_blank" onclick="track('click_scheduling_adventures_tiktok')">
-        Scheduling Adventures (TikTok)
-    </a>
-    <a class="link-button" href="https://www.thv11.com/video/life/holidays/this-home-alone-inspired-house-turns-into-christmas-destination/91-d48a7e87-3a20-40ea-9069-0f427773aaca" target="_blank" onclick="track('click_kthv')">
-        KTHV Interview
-    </a>
-    <a class="link-button" href="https://katv.com/community/little-rock-arc/conway-family-transforms-home-into-home-alone-holiday-wonderland-angie-howard-talks-with-little-rock-arc-about-the-display-tiktok#" target="_blank" onclick="track('click_katv')">
-        KATV Interview
-    </a>
-    <a class="link-button" href="https://www.fox16.com/video/%e2%80%98home-alone%e2%80%99-house-in-conway-brings-movie-fans-to-central-arkansas/10320795/" target="_blank" onclick="track('click_fox16')">
-        Fox 16 News Interview
+        Follow Us on Facebook <small>Nightly updates, spotlights and weather news</small>
     </a>
 
-    <div id="stats-box">
-        🎯 Visitors Tonight: <span id="visitorsTonight">0</span><br>
-        ⭐ Season Total: <span id="totalVisitors">0</span><br>
-        🕹 Total Game Plays: <span id="totalGamePlays">0</span><br>
-        💚 Supporters: <span id="supporters">0</span><br>
-        🗳️ Voting Link Clicks (historical): <span id="voteClicks">0</span>
+    <details class="press" id="press">
+        <summary>📺 As Seen On <span>KTHV · KATV · Fox 16 · 501 Life · AY Magazine +more</span></summary>
+        <div class="press-list">
+    <a class="press-link" href="https://www.tiktok.com/@juan_awesome77/video/7584246934089583886?_r=1&_t=ZP-92GAkS5uNLS" target="_blank" onclick="track('click_tiktok')">
+        TikTok Juan Awesome Video
+    </a>
+    <a class="press-link" href="https://www.youtube.com/watch?v=S943S5fzK_I" target="_blank" onclick="track('click_channel5_501 Life')">
+        Conway Channel 5 – 501 Life Interview
+    </a>
+    <a class="press-link" href="https://www.instagram.com/reel/DSNuzzfjhCd/?igsh=MW1nMWdjZ2tpbHhkYg%3D%3D" target="_blank" onclick="track('click_uca_channel6_instagram')">
+        UCA Channel 6 Interview (Instagram)
+    </a>
+    <a class="press-link" href="https://501lifemag.com/conways-home-alone-home-starring-tim-and-angie-howard/" target="_blank" onclick="track('click_501life')">
+        501Life Magazine Feature
+    </a>
+    <a class="press-link" href="https://aymag.com/conway-home-alone-house/" target="_blank" onclick="track('click_aymag')">
+        AY Magazine Feature
+    </a>
+    <a class="press-link" href="https://www.tiktok.com/t/ZP8UyaDDa/" target="_blank" onclick="track('click_scheduling_adventures_tiktok')">
+        Scheduling Adventures (TikTok)
+    </a>
+    <a class="press-link" href="https://www.thv11.com/video/life/holidays/this-home-alone-inspired-house-turns-into-christmas-destination/91-d48a7e87-3a20-40ea-9069-0f427773aaca" target="_blank" onclick="track('click_kthv')">
+        KTHV Interview
+    </a>
+    <a class="press-link" href="https://katv.com/community/little-rock-arc/conway-family-transforms-home-into-home-alone-holiday-wonderland-angie-howard-talks-with-little-rock-arc-about-the-display-tiktok#" target="_blank" onclick="track('click_katv')">
+        KATV Interview
+    </a>
+    <a class="press-link" href="https://www.fox16.com/video/%e2%80%98home-alone%e2%80%99-house-in-conway-brings-movie-fans-to-central-arkansas/10320795/" target="_blank" onclick="track('click_fox16')">
+        Fox 16 News Interview
+    </a>
+        </div>
+    </details>
+
+    <div id="stats-box" hidden>
+        <span class="stat" hidden>🎯 Visitors Tonight: <span id="visitorsTonight">0</span><br></span>
+        <span class="stat" hidden>⭐ Season Total: <span id="totalVisitors">0</span><br></span>
+        <span class="stat" hidden>🕹 Total Game Plays: <span id="totalGamePlays">0</span><br></span>
         <p class="stats-note">Counts come from our site tracker and may include link clicks rather than unique visitors or completed games.</p>
     </div>
 
@@ -672,11 +703,17 @@ function updateStats() {
     fetch(scriptURL)
         .then(r => r.json())
         .then(d => {
-            document.getElementById("visitorsTonight").innerText = d.visitorsTonight ?? "—";
-            document.getElementById("totalVisitors").innerText = d.totalVisitors ?? "—";
-            document.getElementById("totalGamePlays").innerText = d.totalGamePlays ?? 0;
-            document.getElementById("supporters").innerText = d.supporters ?? 0;
-            document.getElementById("voteClicks").innerText = d.voteClicks ?? 0;
+            // Only show a count once it's worth showing (no "0 visitors")
+            const show = (id, v, min) => {
+                const n = Number(v) || 0, el = document.getElementById(id);
+                el.innerText = n.toLocaleString();
+                el.parentElement.hidden = n < min;
+                return n >= min;
+            };
+            const any = [show("visitorsTonight", d.visitorsTonight, 10),
+                         show("totalVisitors", d.totalVisitors, 25),
+                         show("totalGamePlays", d.totalGamePlays, 25)].some(Boolean);
+            document.getElementById("stats-box").hidden = !any;
         }).catch(console.error);
 }
 
