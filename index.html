@@ -214,6 +214,13 @@ window.BAYHILL.send = function (payload) {
         .give-updated { font-size: 12px; color: #666; margin-top: 6px; }
 
 
+
+        /* 🏠 2026 display hero clip */
+        .hero { position: relative; margin: 6px 0 16px; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,.45); background: #0a0f1c; }
+        .hero video, .hero img { display: block; width: 100%; height: auto; aspect-ratio: 6 / 5; object-fit: cover; }
+        .hero .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 9px; color: white; font-size: 14px; font-weight: bold;
+                     background: linear-gradient(transparent, rgba(0,0,0,.75)); text-shadow: 0 1px 3px #000; }
+
         /* 🌙 Tonight status card */
         .status { border-radius: 10px; padding: 14px 14px 12px; margin: 4px 0 18px; color: white;
                   background: linear-gradient(160deg, #0d2a4a, #123d2a); box-shadow: 0 2px 10px rgba(0,0,0,.35); }
@@ -262,6 +269,7 @@ window.BAYHILL.send = function (payload) {
             .give-total { font-size: 40px; }
         }
         @media (prefers-reduced-motion: reduce) {
+            .hero video { display: none; } .hero { background: url(media/house2026.jpg) center/cover; aspect-ratio: 6 / 5; }
             .vote-banner::before, .vote-banner::after, .giving::before, .status-head .dot { animation: none; }
             .bar div { transition: none; }
         }
@@ -292,6 +300,13 @@ window.BAYHILL.send = function (payload) {
             CLICK HERE TO CAST YOUR VOTE
         </a>
     </div> -->
+
+    <!-- 🏠 This year's display (muted loop) -->
+    <div class="hero">
+        <video src="media/house2026.mp4" poster="media/house2026.jpg" autoplay muted loop playsinline preload="metadata"
+               aria-label="Walking past the 2026 Home Alone display at night"></video>
+        <div class="cap">The 2026 display · every character hand-painted by Angie Howard</div>
+    </div>
 
     <!-- 🌙 TONIGHT STATUS: driven by config.js + the Control sheet -->
     <div class="status" id="status" aria-live="polite">
@@ -616,7 +631,8 @@ function renderTeams() {
     const box = $("teams"); if (!rows.length) { box.hidden = true; return; }
     const max = rows[0][1];
     box.innerHTML = `<h3>🏆 Team Standings</h3>` + rows.map(([n, v]) =>
-        `<div class="team-row"><span class="nm">Team ${n}</span><span class="tb"><div data-w="${v / max * 100}"></div></span><span class="amt">${usd(v)}</span></div>`).join("");
+        `<div class="team-row"><span class="nm">Team ${n}</span><span class="tb"><div data-w="${v / max * 100}"></div></span><span class="amt">${usd(v)}</span></div>`).join("") +
+        `<p class="give-note" style="text-align:center">Counts only gifts received, updated by the Howards.</p>`;
     box.hidden = false;
     setTimeout(() => box.querySelectorAll(".tb div").forEach(d => d.style.width = d.dataset.w + "%"), 200);
 }
