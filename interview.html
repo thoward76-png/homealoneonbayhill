@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angie on KATV Channel 7 - Home Alone on Bay Hill</title>
+    <meta property="og:title" content="Angie Howard on KATV Channel 7">
+    <meta property="og:description" content="The story behind the Home Alone display on Bay Hill Drive in Conway.">
+    <meta property="og:image" content="https://thoward76-png.github.io/media/katv_interview.jpg">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: url('AdobeStock_375652874.jpeg') no-repeat center center fixed;
+               background-size: cover; color: black; text-align: center; }
+        .container { max-width: 720px; margin: 22px auto; padding: 22px; background: rgba(255,255,255,.93);
+                     border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.5); }
+        h1 { color: darkred; font-size: 28px; margin: 0 0 6px; }
+        .back { display: inline-block; margin-bottom: 14px; color: darkgreen; font-weight: bold; text-decoration: none; }
+        .lead { font-size: 16px; line-height: 1.5; color: #333; margin: 0 0 16px; }
+        video { width: 100%; border-radius: 8px; background: #000; display: block; }
+        .share { margin-top: 12px; font: inherit; font-size: 15px; padding: 10px 16px; border: 0; border-radius: 6px; background: darkgreen; color: white; cursor: pointer; }
+        .note { font-size: 13px; color: #555; margin-top: 14px; }
+        @media (max-width: 560px) { .container { margin: 10px; padding: 15px; } h1 { font-size: 23px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="index.html">← Back to Home</a>
+    <h1>📺 Angie on KATV Channel 7</h1>
+    <p class="lead">Angie stopped by KATV to talk about how the display comes together, the hand-painted characters, and giving back to our community.</p>
+    <video controls playsinline preload="metadata" poster="media/katv_interview.jpg" src="media/katv_interview.mp4"></video>
+    <button class="share" type="button" id="share">Share this video</button>
+    <p class="note">Recorded from the KATV broadcast, November 2026.</p>
+</div>
+<script>
+document.getElementById('share').onclick = async function () {
+    const url = location.href.split('#')[0];
+    try { if (navigator.share) { await navigator.share({ title: 'Angie on KATV Channel 7', url }); return; } } catch (e) { if (e.name === 'AbortError') return; }
+    try { await navigator.clipboard.writeText(url); this.textContent = 'Link copied!'; } catch (e) {}
+};
+</script>
+</body>
+</html>

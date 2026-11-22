@@ -225,6 +225,15 @@ window.BAYHILL.send = function (payload) {
 
 
 
+
+        /* 📰 latest news bar */
+        .newsbar { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; padding: 10px 12px; border-radius: 8px;
+                   background: #fff8e6; border: 1px solid #e3cf9d; color: #222; text-decoration: none; text-align: left; font-size: 15px; line-height: 1.3; }
+        .newsbar .tag { flex: none; background: darkred; color: #fff; font-size: 11px; font-weight: bold; letter-spacing: .08em; padding: 4px 7px; border-radius: 4px; }
+        .newsbar .txt { flex: 1; }
+        .newsbar .go { flex: none; color: darkgreen; font-weight: bold; white-space: nowrap; }
+        .newsbar:hover { background: #fff1cc; }
+
         /* 🏠 2026 display hero clip */
         .hero { position: relative; margin: 6px 0 16px; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,.45); background: #0a0f1c; }
         .hero video, .hero img { display: block; width: 100%; height: auto; aspect-ratio: 6 / 5; object-fit: cover; }
@@ -303,6 +312,13 @@ window.BAYHILL.send = function (payload) {
 
 <body>
 <div class="container">
+    <!-- 📰 LATEST NEWS: swap or remove when it's no longer new -->
+    <a class="newsbar" href="interview.html" data-track="click_katv_interview">
+        <span class="tag">NEW</span>
+        <span class="txt">Angie on <b>KATV Channel 7</b>: the story behind the display</span>
+        <span class="go">Watch ›</span>
+    </a>
+
 
     <div class="logo">
         <img src="IMG_5930.PNG" alt="Home Alone on Bay Hill">
@@ -412,8 +428,9 @@ window.BAYHILL.send = function (payload) {
     </a>
 
     <details class="press" id="press">
-        <summary>📺 As Seen On <span>KTHV · KATV · Fox 16 · 501 Life · AY Magazine +more</span></summary>
+        <summary>📺 As Seen On <span>KATV (new!) · KTHV · Fox 16 · 501 Life · AY Magazine +more</span></summary>
         <div class="press-list">
+            <a class="press-link" href="interview.html" data-track="click_katv_interview_list">KATV Channel 7: Interview with Angie Howard (Nov 2026)</a>
     <a class="press-link" href="https://www.tiktok.com/@juan_awesome77/video/7584246934089583886?_r=1&_t=ZP-92GAkS5uNLS" target="_blank" onclick="track('click_tiktok')">
         TikTok Juan Awesome Video
     </a>
