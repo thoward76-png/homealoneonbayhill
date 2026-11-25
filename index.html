@@ -50,7 +50,7 @@ window.BAYHILL = {
         { date: "2026-11-22", name: "Meet the Artist",  tag: "Angie Howard",            file: "spotlights/06_angie.mp4" },
         { date: "2026-11-23", name: "Marv",             tag: "",                        file: "spotlights/07_marv.mp4" },
         { date: "2026-11-24", name: "Harry",            tag: "",                        file: "spotlights/08_harry.mp4" },
-        { date: "2026-11-25", name: "Kevin",            tag: "Big Kevin & Recliner Kevin", file: "spotlights/09_kevin.mp4" }
+        { date: "2026-11-25", name: "Kevin",            tag: "The star of the show", file: "spotlights/09_kevin.mp4" }
     ],
 
     /* Characters people can vote for, and "teams" for giving */
@@ -233,6 +233,8 @@ window.BAYHILL.send = function (payload) {
         .newsbar .txt { flex: 1; }
         .newsbar .go { flex: none; color: darkgreen; font-weight: bold; white-space: nowrap; }
         .newsbar:hover { background: #fff1cc; }
+        .newsbar + .newsbar { margin-top: -6px; }
+        .newsbar .tag.tv { background: #1d4f91; }
 
         /* 🏠 2026 display hero clip */
         .hero { position: relative; margin: 6px 0 16px; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,.45); background: #0a0f1c; }
@@ -312,9 +314,14 @@ window.BAYHILL.send = function (payload) {
 
 <body>
 <div class="container">
-    <!-- 📰 LATEST NEWS: swap or remove when it's no longer new -->
-    <a class="newsbar" href="interview.html" data-track="click_katv_interview">
+    <!-- 📰 LATEST NEWS: newest on top; swap or remove when it's no longer new -->
+    <a class="newsbar" href="https://www.instagram.com/reel/DgJEM0DRkR6/" target="_blank" rel="noopener" data-track="click_instagram_kevin_reel">
         <span class="tag">NEW</span>
+        <span class="txt"><b>Kevin's here!</b> The star of the show arrives. Watch our new Reel on Instagram</span>
+        <span class="go">Watch ›</span>
+    </a>
+    <a class="newsbar" href="interview.html" data-track="click_katv_interview">
+        <span class="tag tv">ON TV</span>
         <span class="txt">Angie on <b>KATV Channel 7</b>: the story behind the display</span>
         <span class="go">Watch ›</span>
     </a>

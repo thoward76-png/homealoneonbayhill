@@ -29,8 +29,8 @@ window.BAYHILL = {
         { date: "2026-11-21", name: "Buzz",             tag: "Buzz, your girlfriend… WOOF!",                      file: "spotlights/05_buzz.mp4" },
         { date: "2026-11-22", name: "Meet the Artist",  tag: "Angie Howard, the hands behind it all",          file: "spotlights/06_angie.mp4" },
         { date: "2026-11-23", name: "Marv",             tag: "Slipping on our front steps",                      file: "spotlights/07_marv.mp4" },
-        { date: "2026-11-24", name: "Harry",            tag: "",                        file: "spotlights/08_harry.mp4" },
-        { date: "2026-11-25", name: "Kevin",            tag: "Big Kevin & Recliner Kevin", file: "spotlights/09_kevin.mp4" }
+        { date: "2026-11-24", name: "Harry",            tag: "Case file: the Wet Bandits",                      file: "spotlights/08_harry.mp4" },
+        { date: "2026-11-25", name: "Kevin",            tag: "The star of the show", file: "spotlights/09_kevin.mp4" }
     ],
 
     /* Characters people can vote for, and "teams" for giving */
