@@ -33,7 +33,7 @@ window.BAYHILL = {
     openingNight: "2026-11-26",   // Thanksgiving
     lightsOn:  "18:00",           // 6:00 PM
     lightsOff: "22:30",           // 10:30 PM
-    lastNight: "2027-01-01",      // last night the lights run
+    lastNight: "2026-12-25",      // Christmas night is the last night
 
     /* Weather spot for the forecast (Conway, AR) */
     lat: 35.0887, lon: -92.4421,
@@ -50,7 +50,8 @@ window.BAYHILL = {
         { date: "2026-11-22", name: "Meet the Artist",  tag: "Angie Howard",            file: "spotlights/06_angie.mp4" },
         { date: "2026-11-23", name: "Marv",             tag: "",                        file: "spotlights/07_marv.mp4" },
         { date: "2026-11-24", name: "Harry",            tag: "",                        file: "spotlights/08_harry.mp4" },
-        { date: "2026-11-25", name: "Kevin",            tag: "The star of the show", file: "spotlights/09_kevin.mp4" }
+        { date: "2026-11-25", name: "Kevin",            tag: "The star of the show", file: "spotlights/09_kevin.mp4" },
+        { date: "2026-11-26", name: "Opening Night",    tag: "Our 4th season starts tonight!", file: "spotlights/10_opening_night.mp4" }
     ],
 
     /* Characters people can vote for, and "teams" for giving */
@@ -185,6 +186,10 @@ window.BAYHILL.send = function (payload) {
         }
         .link-button:hover, .link-button:focus-visible { background-color: darkred; }
         .link-button small { display: block; font-size: 14px; color: #f0f0e6; margin-top: 4px; }
+        .link-button.soon { background: #5b5b5b; cursor: default; border: 2px dashed #d9b44a; }
+        .link-button.soon:hover { background: #5b5b5b; }
+        .soon-tag { display: inline-block; background: #d9b44a; color: #3a2a00; font-size: 12px; font-weight: bold;
+                    padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; letter-spacing: .5px; }
         .new-badge { font-weight: bold; color: yellow; margin-left: 6px; font-size: 14px; }
 
         /* ❤️ Giving section */
@@ -315,9 +320,14 @@ window.BAYHILL.send = function (payload) {
 <body>
 <div class="container">
     <!-- 📰 LATEST NEWS: newest on top; swap or remove when it's no longer new -->
+    <a class="newsbar" href="spotlights.html" data-track="click_opening_night_video">
+        <span class="tag">NOW OPEN</span>
+        <span class="txt"><b>Our 4th season is here!</b> Lights on nightly 6–10:30 PM. Watch the Opening Night preview</span>
+        <span class="go">Watch ›</span>
+    </a>
     <a class="newsbar" href="https://www.instagram.com/reel/DgJEM0DRkR6/" target="_blank" rel="noopener" data-track="click_instagram_kevin_reel">
         <span class="tag">NEW</span>
-        <span class="txt"><b>Kevin's here!</b> The star of the show arrives. Watch our new Reel on Instagram</span>
+        <span class="txt"><b>Kevin's here!</b> The star of the show arrives on Instagram</span>
         <span class="go">Watch ›</span>
     </a>
     <a class="newsbar" href="interview.html" data-track="click_katv_interview">
@@ -412,16 +422,14 @@ window.BAYHILL.send = function (payload) {
     <a class="link-button" href="homealoneonbayhill_findit_2.html" data-track="play_trivia">
         🎄 Home Alone Trivia <small>10 questions. Miss one? Retry just those.</small>
     </a>
-    <a class="link-button" href="https://thoward76-png.github.io/home_alone_wet_bandits_game/" data-track="play_wetbandits">
-        🪤 Wet Bandits Return <small>Make your choices and stop the Wet Bandits</small>
-    </a>
-    <a class="link-button" href="https://thoward76-png.github.io/home-alone-bay-hill-drive-game/" data-track="play_heist">
-        🚐 Bay Hill Drive Heist <small>Pick your difficulty and see how it ends</small>
-    </a>
+    <div class="link-button soon" aria-disabled="true">
+        🚐 NEW: The Bay Hill Drive Heist <span class="soon-tag">COMING SOON</span>
+        <small>Help Kevin stop the Wet Bandits in five chapters. Check back soon!</small>
+    </div>
 
     <div class="section-title">🎬 Character Spotlights</div>
     <a class="link-button" href="spotlights.html" data-track="click_spotlights">
-        Watch the Spotlights <small>A new character from the yard every night until Thanksgiving</small>
+        Watch the Spotlights <small>Meet the cast and watch our Opening Night preview</small>
     </a>
 
     <div class="section-title">🗳️ Have Your Say</div>
@@ -578,6 +586,10 @@ function renderStatus() {
         card.classList.add("on");
         head = `<span class="dot"></span>The lights are ON!`;
         sub = `Come on by. We're open until ${fmt12(B.lightsOff)} tonight.`;
+    } else if (today === B.lastNight) {
+        head = "That's a wrap for 2026!";
+        sub = "Thank you for a wonderful season. Merry Christmas, ya filthy animal!";
+        wxNight = null;
     } else {
         head = "Lights are off for tonight";
         sub = `Back tomorrow at ${fmt12(B.lightsOn)}. Sleep tight, ya filthy animal.`;
