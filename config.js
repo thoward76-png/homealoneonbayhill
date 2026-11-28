@@ -31,7 +31,8 @@ window.BAYHILL = {
         { date: "2026-11-23", name: "Marv",             tag: "Slipping on our front steps",                      file: "spotlights/07_marv.mp4" },
         { date: "2026-11-24", name: "Harry",            tag: "Case file: the Wet Bandits",                      file: "spotlights/08_harry.mp4" },
         { date: "2026-11-25", name: "Kevin",            tag: "The star of the show", file: "spotlights/09_kevin.mp4" },
-        { date: "2026-11-26", name: "Opening Night",    tag: "Our 4th season starts tonight!", file: "spotlights/10_opening_night.mp4" }
+        { date: "2026-11-26", name: "Opening Night",    tag: "Our 4th season starts tonight!", file: "spotlights/10_opening_night.mp4" },
+        { date: "2026-11-27", name: "Kevin's Wish",     tag: "Parade of Homes · Sunday, Nov 29", file: "spotlights/11_kevins_wish.mp4" }
     ],
 
     /* Characters people can vote for, and "teams" for giving */

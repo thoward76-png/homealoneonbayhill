@@ -51,7 +51,8 @@ window.BAYHILL = {
         { date: "2026-11-23", name: "Marv",             tag: "",                        file: "spotlights/07_marv.mp4" },
         { date: "2026-11-24", name: "Harry",            tag: "",                        file: "spotlights/08_harry.mp4" },
         { date: "2026-11-25", name: "Kevin",            tag: "The star of the show", file: "spotlights/09_kevin.mp4" },
-        { date: "2026-11-26", name: "Opening Night",    tag: "Our 4th season starts tonight!", file: "spotlights/10_opening_night.mp4" }
+        { date: "2026-11-26", name: "Opening Night",    tag: "Our 4th season starts tonight!", file: "spotlights/10_opening_night.mp4" },
+        { date: "2026-11-27", name: "Kevin's Wish",     tag: "Parade of Homes · Sunday, Nov 29", file: "spotlights/11_kevins_wish.mp4" }
     ],
 
     /* Characters people can vote for, and "teams" for giving */
@@ -240,6 +241,7 @@ window.BAYHILL.send = function (payload) {
         .newsbar:hover { background: #fff1cc; }
         .newsbar + .newsbar { margin-top: -6px; }
         .newsbar .tag.tv { background: #1d4f91; }
+        .newsbar .tag.ev { background: darkgreen; }
 
         /* 🏠 2026 display hero clip */
         .hero { position: relative; margin: 6px 0 16px; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,.45); background: #0a0f1c; }
@@ -320,6 +322,17 @@ window.BAYHILL.send = function (payload) {
 <body>
 <div class="container">
     <!-- 📰 LATEST NEWS: newest on top; swap or remove when it's no longer new -->
+    <!-- data-until: this bar hides itself after that date -->
+    <a class="newsbar" data-until="2026-11-29" href="https://wl.donorperfect.net/weblink/WebLink.aspx?name=E365969&amp;id=7" target="_blank" rel="noopener" data-track="click_parade_tickets">
+        <span class="tag ev">SUNDAY</span>
+        <span class="txt"><b>Parade of Homes, Nov 29:</b> step inside our Home Alone apartment &amp; meet Santa. Benefits the Faulkner County Animal Shelter</span>
+        <span class="go">Tickets ›</span>
+    </a>
+    <a class="newsbar" data-until="2026-11-29" href="spotlights.html#2026-11-27" data-track="click_kevins_wish_video">
+        <span class="tag">NEW</span>
+        <span class="txt"><b>Kevin's Wish:</b> one request for Santa, and the shelter pets still waiting for theirs</span>
+        <span class="go">Watch ›</span>
+    </a>
     <a class="newsbar" href="spotlights.html" data-track="click_opening_night_video">
         <span class="tag">NOW OPEN</span>
         <span class="txt"><b>Our 4th season is here!</b> Lights on nightly 6–10:30 PM. Watch the Opening Night preview</span>
@@ -406,8 +419,8 @@ window.BAYHILL.send = function (payload) {
         <div class="pick-label">Give in honor of a character <span style="font-weight:normal">(optional)</span></div>
         <div class="chips" id="teamChips"></div>
         <div class="donation-buttons">
-            <a id="venmoBtn" href="https://account.venmo.com/u/Compass-Academy" target="_blank" onclick="track('support_venmo')">Venmo</a>
-            <a id="cashBtn" href="https://cash.app/$EmandChan?qr=1" target="_blank" onclick="track('support_cashapp')">Cash App</a>
+            <a id="venmoBtn" href="https://account.venmo.com/u/Compass-Academy" target="_blank" onclick="track('support_venmo'); giveClick('Venmo')">Venmo</a>
+            <a id="cashBtn" href="https://cash.app/$EmandChan?qr=1" target="_blank" onclick="track('support_cashapp'); giveClick('Cash App')">Cash App</a>
         </div>
         <p class="trust">💯 Every gift goes straight to Compass Academy. We never handle the money.</p>
         <p class="give-note" id="giveNote"></p>
@@ -490,6 +503,11 @@ window.BAYHILL.send = function (payload) {
 
 </div>
 
+<script>
+/* hide news bars whose data-until date has passed */
+(function () { const t = window.BAYHILL.now().ymd;
+  document.querySelectorAll('[data-until]').forEach(e => { if (t > e.dataset.until) e.remove(); }); })();
+</script>
 <script>
 /* ===================== ❤️ GIVING NUMBERS — EDIT HERE =====================
    Update these as the season goes. Leave a value as null to hide that item.
@@ -692,6 +710,10 @@ function updateGiveLinks() {
         ? `Venmo will fill in "Team ${giveTeam}" for you. On Cash App, add "Team ${giveTeam}" in the note so we can count it.` : "";
 }
 updateGiveLinks();
+/* logs the tap (team + amount picked) to the Give Clicks tab so gifts are easier to match up */
+function giveClick(app) {
+    try { B.send({ type: "giveclick", team: giveTeam || "", amount: giveAmt || "", app }).catch(() => {}); } catch (e) {}
+}
 
 function renderTeams() {
     const rows = B.characters.map(c => [c, Number(CTL["team:" + c]) || 0]).filter(r => r[1] > 0).sort((a, b) => b[1] - a[1]);
